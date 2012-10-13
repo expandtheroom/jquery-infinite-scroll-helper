@@ -1,9 +1,18 @@
 jQuery Infinite Scroll Helper
 =============================
 
-jQuery Infinite Scroll Helper is a lightweight implementation of an infinite scroll.  By providing two essential callbacks, _loadMore_ and _doneLoading_, the jQuery Infinite Scroll Helper plugin makes it a breeze to add infinite scrolling capabilities to your page.
+jQuery Infinite Scroll Helper is a lightweight implementation of an infinite scroll.  By providing two essential callbacks, `loadMore` and `doneLoading`, the jQuery Infinite Scroll Helper plugin makes it a breeze to add infinite scrolling capabilities to your page.
 
-To Use
+Configuration
+-------------
+
+| Option 	      | Type	          | Description	   |
+|:----------      |:------------------|:---------------|
+| loadMore        | function          | A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element|
+| doneLoading     | function          | A callback that must return `true` or `false`, depending on whether loading has completed|
+| bottomBuffer    | integer           | An integer specifiying the number of pixels from the bottom of the winow in which the loadMore function should be invoked|
+
+Usage
 ------
 
 	:::javascript
