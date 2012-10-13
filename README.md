@@ -8,9 +8,9 @@ Configuration
 
 | Option 	      | Type	          | Description	   |
 | --------------- | ------------------| ---------------|
-| loadMore        | function          | A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element|
-| doneLoading     | function          | A callback that must return `true` or `false`, depending on whether loading has completed|
-| bottomBuffer    | integer           | An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked|
+| loadMore        | _function_        | A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element|
+| doneLoading     | _function_        | A callback that must return `true` or `false`, depending on whether loading has completed|
+| bottomBuffer    | _integer_         | An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked|
 
 Usage
 ------
