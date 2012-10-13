@@ -17,13 +17,21 @@
 			position: relative;
 		}
 
+		#wrapper .loader-wrap {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			-webkit-perspective: 400px;
+	   		-moz-perspective: 400px;
+	    	-ms-perspective: 400px;
+	        perspective: 400px;
+		}
+
 		#wrapper .loader {
 			display: block;
-			position: fixed;
-			padding: 10px 0;
+			padding: 20px 0;
 			width: 100%;
-			left: 0;
-			bottom: -100px;
 			opacity: 0;
 			color: #999;
 			font: 35px Helvitica,Arial,sans-serif;
@@ -31,24 +39,33 @@
 			text-align: center;
 			
 			-webkit-box-shadow: 0px -1px 5px rgba(0,0,0,.4);
-			box-shadow: 0px -1px 5px rgba(0,0,0,.4);
-			-webkit-transition: .3s ease-out;
-			-moz-transition: .3s ease-out;
-			-o-transition: .3s ease-out;
-			-ms-transition: .3s ease-out;
-			transition: .3s ease-out;
+			box-shadow: 0px -1px 5px rgba(0,0,0,.4);		
+
+			-webkit-transition: all 450ms ease-out;
+		  	-moz-transition: all 450ms ease-out;
+		    -ms-transition: all 450ms ease-out;
+	        transition: all 450ms ease-out;
+
+			-webkit-transform-origin: 50% 100%;
+            -moz-transform-origin: 50% 100%;
+		    -ms-transform-origin: 50% 100%;
+	        transform-origin: 50% 100%;
+
+	        -webkit-transform: translate3d( 0px, 0px, 0px ) rotateX( 90deg );
+	       	-moz-transform: translate3d( 0px, 0px, 0px ) rotateX( 90deg );
+	        -ms-transform: translate3d( 0px, 0px, 0px ) rotateX( 90deg );
+	        transform: translate3d( 0px, 0px, 0px ) rotateX( 90deg );
 		}
 
 		#wrapper.loading-more .loader {
-			left: 0;
-			bottom: 0;
 			opacity: .9;
-			-webkit-transition: .3s ease-out;
-			-moz-transition: .3s ease-out;
-			-o-transition: .3s ease-out;
-			-ms-transition: .3s ease-out;
-			transition: .3s ease-out;
+
+			-webkit-transform: translate3d( 0px, 0px, 0px ) rotateX( 0deg );
+	        -moz-transform: translate3d( 0px, 0px, 0px ) rotateX( 0deg );
+	        -ms-transform: translate3d( 0px, 0px, 0px ) rotateX( 0deg );
+	        transform: translate3d( 0px, 0px, 0px ) rotateX( 0deg );
 		}
+
 	</style>
 
 	<script>
@@ -94,8 +111,9 @@
 		<div class="content">
 			
 		</div>
-
-		<div class="loader">Loading...</div>
+		<div class="loader-wrap">
+			<div class="loader">Loading...</div>
+		</div>
 	</div>
 </body>
 </html>
