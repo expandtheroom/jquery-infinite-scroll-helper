@@ -5,33 +5,53 @@
 	<script src="../lib/jquery-1.8.2.min.js"></script>
 	<script src="../jquery.infinite-scroll-helper.js"></script>
 	<style>
-		#content {
-			height: 1800px;
-			width: 800px;
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		.content {
+			height: 1000px;
 			background-color: red;
+		}
+		#wrapper {
+			position: relative;
+		}
+
+		#wrapper.loading-more:after {
+			display: block;
+			position: fixed;
+			content: 'Loading';
+			top: 50%;
+			left: 50%;
+			color: black;
+			background-color: white;
+			font-size: 40px;
 		}
 	</style>
 
 	<script>
 		var loadingCount = 0;
-		var colors = ['blue', 'green', 'yellow', 'salmon', 'purple'];
+		var colors = ['red', 'blue', 'green', 'yellow', 'salmon', 'purple'];
 		$(function() {
-			$('#wrapper').simpleInfiniteScroll({
-				loadMore: function() {
-					console.log('load more');
+			var pageCount;
+			$('#wrapper').infiniteScrollHelper({
+				loadMore: function(page) {
+					console.log('load more page: ' + page);
+					pageCount = page;
 				},
 				doneLoading: function() {
 					loadingCount++;
-					console.log('done loading cb');
+
 					if (loadingCount > 10) {
-						$('#wrapper').append('<div style="height: 500px; background-color: ' + colors[Math.floor(Math.random() * colors.length)] + ';"></div>');
+						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[pageCount - 1 % colors.length] + ';">');
 						loadingCount = 0;
 						return true;
 					}
 					else {
 						return false;
 					}
-				}
+				},
+				bottomBuffer: 80
 			})
 		});
 
@@ -40,7 +60,7 @@
 <body>
 	<div id="wrapper">
 		
-		<div id="content">
+		<div class="content">
 			
 		</div>
 	</div>
