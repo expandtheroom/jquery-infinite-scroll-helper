@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>test</title>
+	<title>jQuery Infinite Scroll Helper Example</title>
 	<script src="../lib/jquery-1.8.2.min.js"></script>
 	<script src="../jquery.infinite-scroll-helper.js"></script>
 	<style>
@@ -10,47 +10,78 @@
 			padding: 0;
 		}
 		.content {
-			height: 1000px;
+			height: 1100px;
 			background-color: red;
 		}
 		#wrapper {
 			position: relative;
 		}
 
-		#wrapper.loading-more:after {
+		#wrapper .loader {
 			display: block;
 			position: fixed;
-			content: 'Loading';
-			top: 50%;
-			left: 50%;
-			color: black;
+			padding: 10px 0;
+			width: 100%;
+			left: 0;
+			bottom: -100px;
+			opacity: 0;
+			color: #999;
+			font: 35px Helvitica,Arial,sans-serif;
 			background-color: white;
-			font-size: 40px;
+			text-align: center;
+			
+			-webkit-box-shadow: 0px -1px 5px rgba(0,0,0,.4);
+			box-shadow: 0px -1px 5px rgba(0,0,0,.4);
+			-webkit-transition: .3s ease-out;
+			-moz-transition: .3s ease-out;
+			-o-transition: .3s ease-out;
+			-ms-transition: .3s ease-out;
+			transition: .3s ease-out;
+		}
+
+		#wrapper.loading-more .loader {
+			left: 0;
+			bottom: 0;
+			opacity: .9;
+			-webkit-transition: .3s ease-out;
+			-moz-transition: .3s ease-out;
+			-o-transition: .3s ease-out;
+			-ms-transition: .3s ease-out;
+			transition: .3s ease-out;
 		}
 	</style>
 
 	<script>
 		var loadingCount = 0;
+		
 		var colors = ['red', 'blue', 'green', 'yellow', 'salmon', 'purple'];
+		
 		$(function() {
 			var pageCount;
+			
 			$('#wrapper').infiniteScrollHelper({
+				
 				loadMore: function(page) {
-					console.log('load more page: ' + page);
+					// load some stuff if ya want
 					pageCount = page;
 				},
+				
 				doneLoading: function() {
 					loadingCount++;
 
 					if (loadingCount > 10) {
-						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[pageCount - 1 % colors.length] + ';">');
+						console.log(pageCount - 1 % colors.length);
+						var colorIndex = (pageCount - 1) % colors.length;
+						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
 						loadingCount = 0;
 						return true;
 					}
 					else {
+						
 						return false;
 					}
 				},
+				
 				bottomBuffer: 80
 			})
 		});
@@ -63,6 +94,8 @@
 		<div class="content">
 			
 		</div>
+
+		<div class="loader">Loading...</div>
 	</div>
 </body>
 </html>
