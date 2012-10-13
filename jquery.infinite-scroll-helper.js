@@ -4,7 +4,7 @@
 		
 		defaults = {
 			bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
-			loadingClass: 'is-loading',
+			loadingClass: 'loading-more',
 			loadMore: $.noop,
 			doneLoading: $.noop
 		};	
@@ -17,6 +17,7 @@
 		this.defaults = defaults;
 		this.loading = false;
 		this.doneLoadingInt = null;
+		this.pageCount = 1;
 		
 		this.init();
 	};
@@ -27,32 +28,37 @@
 	};
 
 	Plugin.prototype.destroy = function() {
-		this.win.off('scroll.simpleInfiniteScroll');
+		this.win.off('scroll.' + pluginName);
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
 		clearInterval(this.doneLoadingInt);
 		this.element.data('plugin_' + pluginName, null);
-	}
+	};
 
 	Plugin.prototype._addListeners = function() {
 		var self = this;
-		this.win.on('scroll.simpleInfiniteScroll', $.proxy(function(e) {
+
+		this.win.on('scroll.' + pluginName, $.proxy(function(e) {
 			var contentOffset = this.element.offset();  
 			
-      		if (this.win.scrollTop() + this.win.height() > this.element.height() + contentOffset.top)
-      		{ 
+      		if (this.win.scrollTop() + this.win.height() + this.options.bottomBuffer >= this.element.height() + contentOffset.top) {
+
       			if (!self.loading) {
-      				self.options.loadMore();
+
+      				self.pageCount++;
+      				self.options.loadMore(self.pageCount);
       				self.loading = true;
-      				self._doneLoadingInt = setInterval(function() {
+      				self.element.addClass(self.defaults.loadingClass);
+
+      				self.doneLoadingInt = setInterval(function() {
       					
       					if (self.options.doneLoading()) {
       						clearInterval(self.doneLoadingInt);
       						self.loading = false;
+      						self.element.removeClass(self.defaults.loadingClass);
       					}
       				}, 300);
       			}
-      			self.element.addClass(self.defaults.loadingClass);
     		}
 		}, this));
 	};
@@ -66,5 +72,6 @@
 				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
 			}
 		});
-	}
-})(jQuery, window)
+	};
+
+})(jQuery, window);
