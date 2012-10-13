@@ -6,11 +6,11 @@ jQuery Infinite Scroll Helper is a lightweight implementation of an infinite scr
 Configuration
 -------------
 
-| Option 	      | Type	          | Description	   |
-| --------------- | ------------------| ---------------|
-| loadMore        | _function_        | A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element|
-| doneLoading     | _function_        | A callback that must return `true` or `false`, depending on whether loading has completed|
-| bottomBuffer    | _integer_         | An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked|
+| OPTION 	      	| TYPE		          	| DESCRIPTION	   	|
+|:-----------------	|:---------------------	|:-----------------	|
+| *loadMore*        | _function_        	| A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element|
+| *doneLoading*     | _function_        	| A callback that must return `true` or `false`, depending on whether loading has completed|
+| *bottomBuffer*    | _integer_         	| An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked|
 
 Usage
 ------
