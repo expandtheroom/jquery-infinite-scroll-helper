@@ -31,6 +31,7 @@
 	};
 
 	// Private Methods
+	
 	Plugin.prototype.init = function() {
 
 		this._addListeners();
@@ -69,7 +70,7 @@
 	// Public Methods
 
 	Plugin.prototype.destroy = function() {
-		
+
 		this.win.off('scroll.' + pluginName);
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
@@ -78,6 +79,7 @@
 	};
 
 	// Plugin Definition
+	
 	$.fn[pluginName] = function(options) {
 
 		return this.each(function() {
