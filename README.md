@@ -11,7 +11,7 @@ Options
 _(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
 
 ### doneLoading ###
-_(function)_ A callback that must return `true` or `false`, depending on whether loading has completed
+_(function)_ A callback function that must return `true` or `false`, depending on whether loading has completed
 
 ### bottomBuffer ###
 _(integer)_ An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked
