@@ -79,15 +79,15 @@
 			$('#wrapper').infiniteScrollHelper({
 				
 				loadMore: function(page) {
-					// load some stuff if ya want
+					// ajax request would be kicked off here
 					pageCount = page;
+					$('.loader').text('Loading Page ' + page + '...');
 				},
 				
 				doneLoading: function() {
 					loadingCount++;
 
 					if (loadingCount > 10) {
-						console.log(pageCount - 1 % colors.length);
 						var colorIndex = (pageCount - 1) % colors.length;
 						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
 						loadingCount = 0;
