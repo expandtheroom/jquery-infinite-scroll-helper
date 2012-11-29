@@ -17,7 +17,7 @@ _(function)_ A callback function that must return `true` or `false`, depending o
 _(integer)_ An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
 
 ### loadingClass ###
-_(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading-more`.
+_(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading`.
 
 
 Usage

@@ -6,16 +6,20 @@
 
 	var pluginName = 'infiniteScrollHelper',
 	
-	// Plugin Defaults	
-
+	/*-------------------------------------------- */
+	/** Plugin Defaults */
+	/*-------------------------------------------- */
+	
 	defaults = {
 		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
-		loadingClass: 'loading-more', // The class that will be added to the element after loadMore is invoked
+		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
 		loadMore: $.noop, // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
 		doneLoading: $.noop // A callback that must return `true` or `false`, depending on whether loading has completed
-	};	
+	};
 
-	// Plugin Constructor
+	/*-------------------------------------------- */
+	/** Plugin Constructor */
+	/*-------------------------------------------- */
 
 	var Plugin = function(element, options) {
 
@@ -27,12 +31,14 @@
 		this.doneLoadingInt = null;
 		this.pageCount = 1;
 		
-		this.init();
+		this._init();
 	};
 
-	// Private Methods
+	/*-------------------------------------------- */
+	/** Private Methods */
+	/*-------------------------------------------- */
 	
-	Plugin.prototype.init = function() {
+	Plugin.prototype._init = function() {
 
 		this._addListeners();
 	};
@@ -67,7 +73,9 @@
 		}, this));
 	};
 
-	// Public Methods
+	/*-------------------------------------------- */
+	/** Public Methods */
+	/*-------------------------------------------- */
 
 	Plugin.prototype.destroy = function() {
 
@@ -78,7 +86,9 @@
 		this.element.data('plugin_' + pluginName, null);
 	};
 
-	// Plugin Definition
+	/*-------------------------------------------- */
+	/** Plugin Definition */
+	/*-------------------------------------------- */
 	
 	$.fn[pluginName] = function(options) {
 
