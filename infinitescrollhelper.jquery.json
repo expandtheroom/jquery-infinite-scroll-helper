@@ -17,9 +17,12 @@
 	"licenses": [
 		{
 			"type": "MIT",
-			"url": "http://opensource.org/licenses/MIT"
+			"url": "https://github.com/expandtheroom/jquery-infinite-scroll-helper/blob/master/LICENSE.txt"
 		}
 	],
+    "homepage": "https://github.com/expandtheroom/jquery-infinite-scroll-helper",
+    "docs": "https://github.com/expandtheroom/jquery-infinite-scroll-helper",
+    "bugs": "https://github.com/expandtheroom/jquery-infinite-scroll-helper/issues",
     "dependencies": {
         "jquery": ">=1.7.0"
     },
