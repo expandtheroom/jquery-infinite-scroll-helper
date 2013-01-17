@@ -3,25 +3,40 @@
  */
 
 ;(function($, window) {
+	
+	'use strict';
 
 	var pluginName = 'infiniteScrollHelper',
+		namespace = 'plugin_' + pluginName;
 	
 	/*-------------------------------------------- */
 	/** Plugin Defaults */
 	/*-------------------------------------------- */
 	
-	defaults = {
+	var	defaults = {
 		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
+		doneLoading: $.noop, // A callback that must return `true` or `false`, depending on whether loading has completed
+		interval: 300, // The interval, in milliseconds, that the doneLoading callback will be called
 		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
-		loadMore: $.noop, // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
-		doneLoading: $.noop // A callback that must return `true` or `false`, depending on whether loading has completed
+		loadMore: $.noop // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
 	};
+
+	/*-------------------------------------------- */
+	/** Helpers */
+	/*-------------------------------------------- */
+	
+	function callMethod(instance, method, args) {
+
+		if ( $.isFunction(instance[method]) ) {
+			instance[method].apply(instance, args);
+		}
+	}
 
 	/*-------------------------------------------- */
 	/** Plugin Constructor */
 	/*-------------------------------------------- */
 
-	var Plugin = function(element, options) {
+	function Plugin(element, options) {
 
 		this.element = $(element);
 		this.options = $.extend({}, defaults, options);
@@ -32,58 +47,84 @@
 		this.pageCount = 1;
 		
 		this._init();
-	};
+	}
 
 	/*-------------------------------------------- */
 	/** Private Methods */
 	/*-------------------------------------------- */
 	
+	/**
+	 * Initializes the plugin
+	 * 
+	 * @private
+	 */
 	Plugin.prototype._init = function() {
 
 		this._addListeners();
 	};
 
+	/**
+	 * Adds listeners required for plugin to function
+	 *
+	 * @private
+	 */
 	Plugin.prototype._addListeners = function() {
-
+		
 		var self = this;
 
-		this.win.on('scroll.' + pluginName, $.proxy(function(e) {
+		self.win.on('scroll.' + pluginName, function(e) {
 
-			var contentOffset = this.element.offset();  
+			var contentOffset = self.element.offset();  
 			
-      		if (this.win.scrollTop() + this.win.height() + this.options.bottomBuffer >= this.element.height() + contentOffset.top) {
+      		if (self._shouldTriggerLoad()) {
 
-      			if (!self.loading) {
-
-      				self.pageCount++;
-      				self.options.loadMore(self.pageCount);
-      				self.loading = true;
-      				self.element.addClass(self.defaults.loadingClass);
-
-      				self.doneLoadingInt = setInterval(function() {
-      					
+  				self.pageCount++;
+  				self.options.loadMore(self.pageCount);
+  				self.loading = true;
+  				self.element.addClass(self.options.loadingClass);
+  				
+  				self.doneLoadingInt = setInterval( 
+  					function() {
       					if (self.options.doneLoading()) {
       						clearInterval(self.doneLoadingInt);
       						self.loading = false;
-      						self.element.removeClass(self.defaults.loadingClass);
+      						self.element.removeClass(self.options.loadingClass);
       					}
-      				}, 300);
-      			}
-    		}
-		}, this));
+  					}, 
+  				self.options.interval);
+      		}
+		});
 	};
+
+	/**
+	 * Determines if the user scrolled far enough to trigger the load more callback
+	 * @return {Bool} true if the load more callback should be triggered, false otherwise
+	 */
+	Plugin.prototype._shouldTriggerLoad = function() {
+
+		var contentOffset = this.element.offset(),
+			elementBottom = this.element.height() + contentOffset.top,
+			scrollBottom = this.win.scrollTop() + this.win.height() + this.options.bottomBuffer;
+
+      	return (!this.loading && scrollBottom >= elementBottom);
+	}
 
 	/*-------------------------------------------- */
 	/** Public Methods */
 	/*-------------------------------------------- */
 
+	/**
+	 * Destroys this instance of the plugin
+	 *
+	 * @public
+	 */
 	Plugin.prototype.destroy = function() {
 
 		this.win.off('scroll.' + pluginName);
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
 		clearInterval(this.doneLoadingInt);
-		this.element.data('plugin_' + pluginName, null);
+		this.element.data(namespace, null);
 	};
 
 	/*-------------------------------------------- */
@@ -91,11 +132,22 @@
 	/*-------------------------------------------- */
 	
 	$.fn[pluginName] = function(options) {
+		
+		var method = false,
+			methodArgs = arguments;
+
+		if (typeof options == 'string') {
+			method = options;
+		}
 
 		return this.each(function() {
-			
-			if (!$.data(this, 'plugin_' + pluginName)) {
-				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+
+			var plugin = $.data(this, namespace);
+
+			if (!plugin) {
+				$.data(this, namespace, new Plugin(this, options));
+			} else if (method) {
+				callMethod(plugin, method, Array.prototype.slice.call(methodArgs, 1));
 			}
 		});
 	};
