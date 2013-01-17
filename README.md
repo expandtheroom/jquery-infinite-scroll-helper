@@ -7,14 +7,17 @@ jQuery Infinite Scroll Helper is a lightweight implementation of the infinite sc
 Options
 -------
 
-### loadMore ###
-_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element.
+### bottomBuffer ###
+_(integer)_ The number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
 
 ### doneLoading ###
 _(function)_ A callback function that must return `true` or `false`, depending on whether loading has completed.
 
-### bottomBuffer ###
-_(integer)_ An integer specifiying the number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
+### interval
+_(integer)_ The interval, in milliseconds, that the doneLoading callback will be called by the plugin.  The default is 300.
+
+### loadMore ###
+_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element.
 
 ### loadingClass ###
 _(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading`.
