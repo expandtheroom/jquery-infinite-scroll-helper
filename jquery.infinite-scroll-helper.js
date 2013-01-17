@@ -12,7 +12,7 @@
 	/*-------------------------------------------- */
 	/** Plugin Defaults */
 	/*-------------------------------------------- */
-	
+
 	var	defaults = {
 		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
 		doneLoading: $.noop, // A callback that must return `true` or `false`, depending on whether loading has completed
@@ -41,11 +41,9 @@
 		this.element = $(element);
 		this.options = $.extend({}, defaults, options);
 		this.win = $(window);
-		this.defaults = defaults;
 		this.loading = false;
 		this.doneLoadingInt = null;
 		this.pageCount = 1;
-		
 		this._init();
 	}
 
@@ -98,7 +96,7 @@
 
 	/**
 	 * Determines if the user scrolled far enough to trigger the load more callback
-	 * @return {Bool} true if the load more callback should be triggered, false otherwise
+	 * @return {Boolean} true if the load more callback should be triggered, false otherwise
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
 
