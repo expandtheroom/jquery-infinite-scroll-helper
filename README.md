@@ -22,6 +22,15 @@ _(function)_ A callback function that is invoked when the scrollbar eclipses the
 ### loadingClass ###
 _(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading`.
 
+Methods
+-------
+
+### destroy ###
+Destroys the plugin instance, removing all internal listeners and nullifying any external references.
+
+	:::javascript
+	$(selector).infiniteScrollHelper('destroy');
+
 
 Usage
 ------
