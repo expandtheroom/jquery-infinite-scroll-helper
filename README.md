@@ -28,14 +28,12 @@ Methods
 ### destroy ###
 Destroys the plugin instance, removing all internal listeners and nullifying any external references.
 
-	:::javascript
 	$(selector).infiniteScrollHelper('destroy');
 
 
 Usage
 ------
 
-	:::javascript
 	$('#my-element-to-watch').infiniteScrollHelper({
 		loadMore: function(page) {
 			// load some data, parse some data
