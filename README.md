@@ -6,6 +6,7 @@ jQuery Infinite Scroll Helper is a lightweight implementation of the infinite sc
 
 Options
 -------
+- - -
 
 ### bottomBuffer ###
 _(integer)_ The number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
@@ -24,6 +25,7 @@ _(string)_ The class name that will be applied to the element when `loadMore` is
 
 Methods
 -------
+- - -
 
 ### destroy ###
 Destroys the plugin instance, removing all internal listeners and nullifying any external references.
@@ -34,6 +36,7 @@ Destroys the plugin instance, removing all internal listeners and nullifying any
 
 Usage
 ------
+- - -
 
 	:::javascript
 	$('#my-element-to-watch').infiniteScrollHelper({
