@@ -55,8 +55,15 @@ Dependencies
 Changelog
 ---------
 
-### 1.0.0
-* Initial Release
+### 1.0.3
+* Changing details in manifest file
+* Doc updates
+
+### 1.0.2
+* Fixed manifest file keyword error
 
 ### 1.0.1
 * Regenerated minified/production script to match development version
+
+### 1.0.0
+* Initial Release
