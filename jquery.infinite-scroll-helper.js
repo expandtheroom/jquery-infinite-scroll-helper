@@ -72,8 +72,6 @@
 
 		self.win.on('scroll.' + pluginName, function(e) {
 
-			var contentOffset = self.element.offset();  
-			
       		if (self._shouldTriggerLoad()) {
 
   				self.pageCount++;
@@ -96,7 +94,9 @@
 
 	/**
 	 * Determines if the user scrolled far enough to trigger the load more callback
+     *
 	 * @return {Boolean} true if the load more callback should be triggered, false otherwise
+     * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
 
@@ -112,7 +112,7 @@
 	/*-------------------------------------------- */
 
 	/**
-	 * Destroys this instance of the plugin
+	 * Destroys the plugin instance
 	 *
 	 * @public
 	 */
