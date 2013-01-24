@@ -11,13 +11,14 @@ Options
 _(integer)_ The number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
 
 ### doneLoading ###
-_(function)_ A callback function that must return `true` or `false`, depending on whether loading has completed.
+_(function)_ A callback function that must return `true` or `false`, depending on whether loading has completed.  This callback is passed a `pageCount` argument.
 
 ### interval
 _(integer)_ The interval, in milliseconds, that the doneLoading callback will be called by the plugin.  The default is 300.
 
 ### loadMore ###
-_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element.
+_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element.  This callback is passed a `pageCount` argument which can be helpful
+when making requests to endpoints that accept a page parameter.
 
 ### loadingClass ###
 _(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading`.
