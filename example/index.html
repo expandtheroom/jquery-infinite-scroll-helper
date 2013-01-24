@@ -69,7 +69,8 @@
 	</style>
 
 	<script>
-		var loadingCount = 0;
+		var loadingCount = 0,
+			totalPages = 4;
 		
 		var colors = ['red', 'blue', 'green', 'yellow', 'salmon', 'purple'];
 		
@@ -84,13 +85,19 @@
 					$('.loader').text('Loading Page ' + page + '...');
 				},
 				
-				doneLoading: function() {
+				doneLoading: function(pageCount) {
+					// we would typical return some sort of loading state variable here to indicate whether we are still loading or not
+
 					loadingCount++;
 
 					if (loadingCount > 10) {
 						var colorIndex = (pageCount - 1) % colors.length;
 						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
 						loadingCount = 0;
+
+						if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
+							$('#wrapper').infiniteScrollHelper('destroy');
+						}
 						return true;
 					}
 					else {
