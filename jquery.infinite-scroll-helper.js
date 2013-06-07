@@ -117,12 +117,11 @@
 	 * @public
 	 */
 	Plugin.prototype.destroy = function() {
-
 		this.win.off('scroll.' + pluginName);
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
+		$.data(this.element[0], namespace, null);
 		clearInterval(this.doneLoadingInt);
-		this.element.data(namespace, null);
 	};
 
 	/*-------------------------------------------- */

@@ -55,6 +55,8 @@ Dependencies
 
 Changelog
 ---------
+### 1.0.4
+* Fixed issue #4 - destroy method was not properly destroying instance which prevented another instance from being created
 
 ### 1.0.3
 * Changing details in manifest file
