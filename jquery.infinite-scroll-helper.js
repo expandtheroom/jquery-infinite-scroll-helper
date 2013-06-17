@@ -104,7 +104,7 @@
 			elementBottom = this.element.height() + contentOffset.top,
 			scrollBottom = this.win.scrollTop() + this.win.height() + this.options.bottomBuffer;
 
-      	return (!this.loading && scrollBottom >= elementBottom);
+      	return (!this.loading && scrollBottom >= elementBottom && this.element.is(':visible'));
 	}
 
 	/*-------------------------------------------- */
