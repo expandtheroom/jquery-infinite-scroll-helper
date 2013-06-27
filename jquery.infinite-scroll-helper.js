@@ -81,7 +81,9 @@
   				
   				self.doneLoadingInt = setInterval( 
   					function() {
-      					if (self.options.doneLoading(self.pageCount)) {
+  					if (self.options.doneLoading === null) {
+      						clearInterval(self.doneLoadingInt);
+  					} else if (self.options.doneLoading(self.pageCount)) {
       						clearInterval(self.doneLoadingInt);
       						self.loading = false;
       						self.element.removeClass(self.options.loadingClass);
