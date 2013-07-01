@@ -79,33 +79,25 @@
 			
 			$('#wrapper').infiniteScrollHelper({
 				
-				loadMore: function(page) {
+				loadMore: function(page, done) {
 					// ajax request would be kicked off here
 					pageCount = page;
 					$('.loader').text('Loading Page ' + page + '...');
+
+					setTimeout(
+						function() {
+							var colorIndex = (pageCount - 1) % colors.length;
+							$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
+
+							if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
+								console.log('desroying');
+								$('#wrapper').infiniteScrollHelper('destroy');
+							}
+
+							done();
+						} 
+					, 2000);
 				},
-				
-				doneLoading: function(pageCount) {
-					// we would typical return some sort of loading state variable here to indicate whether we are still loading or not
-
-					loadingCount++;
-
-					if (loadingCount > 10) {
-						var colorIndex = (pageCount - 1) % colors.length;
-						$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
-						loadingCount = 0;
-
-						if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
-							$('#wrapper').infiniteScrollHelper('destroy');
-						}
-						return true;
-					}
-					else {
-						
-						return false;
-					}
-				},
-				
 				bottomBuffer: 80
 			})
 		});
