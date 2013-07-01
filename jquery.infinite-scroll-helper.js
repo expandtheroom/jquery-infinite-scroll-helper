@@ -15,7 +15,7 @@
 
 	var	defaults = {
 		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
-		doneLoading: $.noop, // A callback that must return `true` or `false`, depending on whether loading has completed
+		doneLoading: null, // A callback that must return `true` or `false`, depending on whether loading has completed
 		interval: 300, // The interval, in milliseconds, that the doneLoading callback will be called
 		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
 		loadMore: $.noop // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
@@ -26,7 +26,6 @@
 	/*-------------------------------------------- */
 	
 	function callMethod(instance, method, args) {
-
 		if ( $.isFunction(instance[method]) ) {
 			instance[method].apply(instance, args);
 		}
@@ -36,8 +35,7 @@
 	/** Plugin Constructor */
 	/*-------------------------------------------- */
 
-	function Plugin(element, options) {
-
+	var Plugin = function(element, options) {
 		this.element = $(element);
 		this.options = $.extend({}, defaults, options);
 		this.win = $(window);
@@ -45,7 +43,7 @@
 		this.doneLoadingInt = null;
 		this.pageCount = 1;
 		this._init();
-	}
+	};
 
 	/*-------------------------------------------- */
 	/** Private Methods */
@@ -57,7 +55,6 @@
 	 * @private
 	 */
 	Plugin.prototype._init = function() {
-
 		this._addListeners();
 	};
 
@@ -67,29 +64,27 @@
 	 * @private
 	 */
 	Plugin.prototype._addListeners = function() {
-		
+		this.win.on('scroll.' + pluginName, $.proxy(this._handleScroll, this));
+	};
+
+	Plugin.prototype._handleScroll = function(e) {
 		var self = this;
 
-		self.win.on('scroll.' + pluginName, function(e) {
-
-      		if (self._shouldTriggerLoad()) {
-
-  				self.pageCount++;
-  				self.options.loadMore(self.pageCount);
-  				self.loading = true;
-  				self.element.addClass(self.options.loadingClass);
-  				
-  				self.doneLoadingInt = setInterval( 
-  					function() {
-      					if (self.options.doneLoading(self.pageCount)) {
-      						clearInterval(self.doneLoadingInt);
-      						self.loading = false;
-      						self.element.removeClass(self.options.loadingClass);
-      					}
-  					}, 
-  				self.options.interval);
-      		}
-		});
+		if (this._shouldTriggerLoad()) {
+			this.beginLoadMore();			
+			
+			// if a the doneLoading callback was provided, set an interval to check when to call it			
+			if (this.options.doneLoading) {
+				this.doneLoadingInt = setInterval( 
+					function() {
+						if (self.options.doneLoading(self.pageCount)) {
+							self.endLoadMore();
+						}
+					}, 
+					this.options.interval
+				);
+			}
+  		}
 	};
 
 	/**
@@ -99,17 +94,29 @@
      * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
-
 		var contentOffset = this.element.offset(),
 			elementBottom = this.element.height() + contentOffset.top,
 			scrollBottom = this.win.scrollTop() + this.win.height() + this.options.bottomBuffer;
 
       	return (!this.loading && scrollBottom >= elementBottom && this.element.is(':visible'));
-	}
+	};
 
 	/*-------------------------------------------- */
 	/** Public Methods */
 	/*-------------------------------------------- */
+
+	Plugin.prototype.beginLoadMore = function() {
+		this.pageCount++;
+		this.options.loadMore(this.pageCount, $.proxy(this.endLoadMore, this));
+		this.loading = true;
+		this.element.addClass(this.options.loadingClass);
+	};
+
+	Plugin.prototype.endLoadMore = function() {
+		clearInterval(this.doneLoadingInt);
+      	this.loading = false;
+      	this.element.removeClass(this.options.loadingClass);
+	};
 
 	/**
 	 * Destroys the plugin instance
@@ -129,7 +136,6 @@
 	/*-------------------------------------------- */
 	
 	$.fn[pluginName] = function(options) {
-		
 		var method = false,
 			methodArgs = arguments;
 
