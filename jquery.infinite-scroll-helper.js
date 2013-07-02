@@ -96,16 +96,16 @@
 	 */
 	Plugin.prototype._handleScroll = function(e) {
 		var self = this;
-
+		console.log('handlescroll');
 		if (this._shouldTriggerLoad()) {
-			this.beginLoadMore();			
+			this._beginLoadMore();			
 			
 			// if a the doneLoading callback was provided, set an interval to check when to call it			
 			if (this.options.doneLoading) {
 				this.doneLoadingInt = setInterval( 
 					function() {
 						if (self.options.doneLoading(self.pageCount)) {
-							self.endLoadMore();
+							self._endLoadMore();
 						}
 					}, 
 					this.options.interval
@@ -121,29 +121,38 @@
      * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
-		console.log('should trigger load');
 		var elementBottom = this.$element.height(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-		console.log(elementBottom + ' ' + scrollBottom);
+      	
       	return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
+	};
+
+	/**
+	 * Initialize a call to the loadMore callback and set to loading state
+	 * 
+	 * @private
+	 */
+	Plugin.prototype._beginLoadMore = function() {
+		this.pageCount++;
+		this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
+		this.loading = true;
+		this.$element.addClass(this.options.loadingClass);
+	};
+
+	/**
+	 * Return the plugin to the not loading state
+	 * 
+	 * @private
+	 */
+	Plugin.prototype._endLoadMore = function() {
+		clearInterval(this.doneLoadingInt);
+      	this.loading = false;
+      	this.$element.removeClass(this.options.loadingClass);
 	};
 
 	/*-------------------------------------------- */
 	/** Public Methods */
 	/*-------------------------------------------- */
-
-	Plugin.prototype.beginLoadMore = function() {
-		this.pageCount++;
-		this.options.loadMore(this.pageCount, $.proxy(this.endLoadMore, this));
-		this.loading = true;
-		this.$element.addClass(this.options.loadingClass);
-	};
-
-	Plugin.prototype.endLoadMore = function() {
-		clearInterval(this.doneLoadingInt);
-      	this.loading = false;
-      	this.$element.removeClass(this.options.loadingClass);
-	};
 
 	/**
 	 * Destroys the plugin instance
