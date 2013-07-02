@@ -27,7 +27,27 @@
 	    	-ms-perspective: 400px;
 	        perspective: 400px;
 		}
-
+		#ov-hidden {
+			position: fixed;
+			width: 200px;
+			height: 500px;
+			overflow-y: scroll;
+			border: 1px solid white;
+		}
+		#ov-content-wrapper .load-more {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			display: none;
+		}
+		#ov-content-wrapper.loading .load-more {
+			display: block;
+		}
+		#ov-hidden .content {
+			height: 800px;
+			background-color: salmon;
+		}
 		#wrapper .loader {
 			display: block;
 			padding: 20px 0;
@@ -75,38 +95,79 @@
 		var colors = ['red', 'blue', 'green', 'yellow', 'salmon', 'purple'];
 		
 		$(function() {
-			var pageCount;
+
+			(function() {
+				var pageCount;
 			
-			$('#wrapper').infiniteScrollHelper({
-				
-				loadMore: function(page, done) {
-					// ajax request would be kicked off here
-					pageCount = page;
-					$('.loader').text('Loading Page ' + page + '...');
+				$('#wrapper').infiniteScrollHelper({
+					
+					loadMore: function(page, done) {
+						console.log('load more');
+						// ajax request would be kicked off here
+						pageCount = page;
+						$('.loader').text('Loading Page ' + page + '...');
 
-					setTimeout(
-						function() {
-							var colorIndex = (pageCount - 1) % colors.length;
-							$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
+						setTimeout(
+							function() {
+								var colorIndex = (pageCount - 1) % colors.length;
+								$('#wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
 
-							if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
-								console.log('desroying');
-								$('#wrapper').infiniteScrollHelper('destroy');
-							}
+								if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
+									console.log('desroying');
+									$('#wrapper').infiniteScrollHelper('destroy');
+								}
 
-							done();
-						} 
-					, 2000);
-				},
-				bottomBuffer: 80
-			})
+								done();
+							} 
+						, 2000);
+					},
+					bottomBuffer: 80
+				})
+			}());
+
+			(function() {
+				var pageCount;
+			
+				$('#ov-content-wrapper').infiniteScrollHelper({
+					
+					loadMore: function(page, done) {
+						console.log('load more');
+						// ajax request would be kicked off here
+						pageCount = page;
+						$('.load-more').text('Loading Page ' + page + '...');
+
+						setTimeout(
+							function() {
+								var colorIndex = (pageCount - 1) % colors.length;
+								$('#ov-content-wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
+
+								if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
+									console.log('desroying');
+									$('#ov-content-wrapper').infiniteScrollHelper('destroy');
+								}
+
+								done();
+							} 
+						, 2000);
+					},
+					bottomBuffer: 80
+				})
+			}());
+			
 		});
 
 	</script>
 </head>
 <body>
+	<div id="ov-hidden">
+		<div id="ov-content-wrapper">
+			<div class="content">
+				
+			</div>
+			<div class="load-more">Loading...</div>	
+		</div>
+	</div>
 	<div id="wrapper">
-		
 		<div class="content">
 			
 		</div>
