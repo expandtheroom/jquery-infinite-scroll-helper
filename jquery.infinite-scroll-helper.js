@@ -14,10 +14,12 @@
 	/*-------------------------------------------- */
 
 	var	defaults = {
-		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a getMore event
+		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a loadMore event
+		debounceInt: 100, // The interval, in milliseconds that the scroll event handler will be debounced
 		doneLoading: null, // A callback that must return `true` or `false`, depending on whether loading has completed
 		interval: 300, // The interval, in milliseconds, that the doneLoading callback will be called
 		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
+		loadingClassTarget: null, // A selector targeting the element that will receive the loadingClass
 		loadMore: $.noop // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
 	};
 
@@ -31,15 +33,35 @@
 		}
 	}
 
+	// Borrowed from Underscore.js (http://underscorejs.org/)
+	function debounce(func, wait, immediate) {
+		var timeout;
+
+		return function() {
+			var context = this, args = arguments;
+			var later = function() {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow) func.apply(context, args);
+		};
+	};
+
 	/*-------------------------------------------- */
 	/** Plugin Constructor */
 	/*-------------------------------------------- */
 
-	var Plugin = function(element, options) {
+	function Plugin(element, options) {
+		this.options = $.extend({}, defaults, options);
+		
 		this.$element = $(element);
+		this.$loadingClassTarget = this.options.loadingClassTarget ? $(this.options.loadingClassTarget) : this.$element;
 		this.$scrollContainer = this._getScrollContainer();
 		this.$win = $(window);
-		this.options = $.extend({}, defaults, options);
+		
 		this.loading = false;
 		this.doneLoadingInt = null;
 		this.pageCount = 1;
@@ -67,14 +89,23 @@
 	 * @return {$} The jQuery object that wraps the scroll container
 	 */
 	Plugin.prototype._getScrollContainer = function() {
-		// find the first parent that is overflow-y:scroll. We want to monitor
-		// that element for scroll events and scroll position
-		var $scrollContainer = this.$element.parents().filter(function() { 
-			return $(this).css('overflow-y') == 'scroll';
-		});
+		var $scrollContainer = null;
+		
+		// see if the target element is overflow-y:scroll. If so, it is the 
+		// scroll container
+		if (this.$element.css('overflow-y') == 'scroll') {
+			$scrollContainer = this.$element;
+		}
 
-		// if no parent with overflow-y:scroll was found, assume the window
-		// as the scroll container to monitor
+		// see if a parent is overflow-y:scroll. If so, it is the scroll container
+		if (!$scrollContainer) {
+			$scrollContainer = this.$element.parents().filter(function() { 
+				return $(this).css('overflow-y') == 'scroll';
+			});
+		}
+
+		// if the target element or any parent aren't overflow-y:scroll, 
+		// assume the window as the scroll container
 		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : $(window);
 
 		return $scrollContainer;
@@ -86,7 +117,10 @@
 	 * @private
 	 */
 	Plugin.prototype._addListeners = function() {
-		this.$scrollContainer.on('scroll.' + pluginName, $.proxy(this._handleScroll, this));
+		var self = this;
+		this.$scrollContainer.on('scroll.' + pluginName, debounce(function() {
+			self._handleScroll();
+		}, this.options.debounceInt));
 	};
 
 	/**
@@ -123,7 +157,7 @@
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this.$element.height(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-      	
+      	console.log(elementBottom + ' : ' + scrollBottom);
       	return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
@@ -136,7 +170,7 @@
 		this.pageCount++;
 		this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
 		this.loading = true;
-		this.$element.addClass(this.options.loadingClass);
+		this.$loadingClassTarget.addClass(this.options.loadingClass);
 	};
 
 	/**
@@ -147,7 +181,7 @@
 	Plugin.prototype._endLoadMore = function() {
 		clearInterval(this.doneLoadingInt);
       	this.loading = false;
-      	this.$element.removeClass(this.options.loadingClass);
+      	this.$loadingClassTarget.removeClass(this.options.loadingClass);
 	};
 
 	/*-------------------------------------------- */
@@ -160,7 +194,6 @@
 	 * @public
 	 */
 	Plugin.prototype.destroy = function() {
-		console.log('destroy ish');
 		this.$scrollContainer.off('scroll.' + pluginName);
 		this.options.loadMore = null;
 		this.options.doneLoading = null;

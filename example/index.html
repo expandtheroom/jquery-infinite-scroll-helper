@@ -15,6 +15,7 @@
 		}
 		#wrapper {
 			position: relative;
+			margin-left: 200px;
 		}
 
 		#wrapper .loader-wrap {
@@ -22,6 +23,8 @@
 			bottom: 0;
 			left: 0;
 			width: 100%;
+			padding-left: 200px;
+			box-sizing: border-box;
 			-webkit-perspective: 400px;
 	   		-moz-perspective: 400px;
 	    	-ms-perspective: 400px;
@@ -31,21 +34,22 @@
 			position: fixed;
 			z-index: 10;
 			width: 200px;
-			height: 500px;
-			overflow-y: scroll;
+			height: 100%;
 			border: 1px solid white;
 		}
 		#ov-content-wrapper {
+			overflow-y: scroll;
 			position: relative;
+			height: 100%;
 		}
-		#ov-content-wrapper .load-more {
+		#ov-hidden .load-more {
 			position: absolute;
-			bottom: 0;
+			top: 0;
 			left: 0;
 			width: 100%;
 			display: none;
 		}
-		#ov-content-wrapper.loading .load-more {
+		#ov-hidden.loading .load-more {
 			display: block;
 		}
 		#ov-hidden .content {
@@ -154,7 +158,8 @@
 							} 
 						, 2000);
 					},
-					bottomBuffer: 80
+					bottomBuffer: 80,
+					loadingClassTarget: '#ov-hidden'
 				})
 			}());
 			
@@ -168,8 +173,8 @@
 			<div class="content">
 				
 			</div>
-			<div class="load-more">Loading...</div>	
 		</div>
+		<div class="load-more">Loading...</div>	
 	</div>
 	<div id="wrapper">
 		<div class="content">
