@@ -24,43 +24,21 @@
 	};
 
 	/*-------------------------------------------- */
-	/** Helpers */
-	/*-------------------------------------------- */
-	
-	function callMethod(instance, method, args) {
-		if ( $.isFunction(instance[method]) ) {
-			instance[method].apply(instance, args);
-		}
-	}
-
-	// Borrowed from Underscore.js (http://underscorejs.org/)
-	function debounce(func, wait, immediate) {
-		var timeout;
-
-		return function() {
-			var context = this, args = arguments;
-			var later = function() {
-				timeout = null;
-				if (!immediate) func.apply(context, args);
-			};
-			var callNow = immediate && !timeout;
-			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
-			if (callNow) func.apply(context, args);
-		};
-	};
-
-	/*-------------------------------------------- */
 	/** Plugin Constructor */
 	/*-------------------------------------------- */
 
+	/**
+	 * The Plugin constructor
+	 * @param {HTMLElement} element The element that will be monitored
+	 * @param {Object} options The plugin options
+	 */
 	function Plugin(element, options) {
 		this.options = $.extend({}, defaults, options);
 		
 		this.$element = $(element);
-		this.$loadingClassTarget = this.options.loadingClassTarget ? $(this.options.loadingClassTarget) : this.$element;
-		this.$scrollContainer = this._getScrollContainer();
 		this.$win = $(window);
+		this.$loadingClassTarget = this._getLoadingClassTarget();
+		this.$scrollContainer = this._getScrollContainer();
 		
 		this.loading = false;
 		this.doneLoadingInt = null;
@@ -83,10 +61,21 @@
 	};
 
 	/**
+	 * Returns the element that should have the loading class applied to it when 
+	 * the plugin is in the loading state
+	 * 
+	 * @return {jQuery} The jQuery wrapped element
+	 * @private
+	 */
+	Plugin.prototype._getLoadingClassTarget = function() {
+		return this.options.loadingClassTarget ? $(this.options.loadingClassTarget) : this.$element;
+	};
+
+	/**
 	 * Finds the element that acts as the scroll container for the infinite
 	 * scroll content
 	 * 
-	 * @return {$} The jQuery object that wraps the scroll container
+	 * @return {jQuery} The jQuery object that wraps the scroll container
 	 */
 	Plugin.prototype._getScrollContainer = function() {
 		var $scrollContainer = null;
@@ -106,7 +95,7 @@
 
 		// if the target element or any parent aren't overflow-y:scroll, 
 		// assume the window as the scroll container
-		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : $(window);
+		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : this.$win;
 
 		return $scrollContainer;
 	};
@@ -118,6 +107,7 @@
 	 */
 	Plugin.prototype._addListeners = function() {
 		var self = this;
+		
 		this.$scrollContainer.on('scroll.' + pluginName, debounce(function() {
 			self._handleScroll();
 		}, this.options.debounceInt));
@@ -130,9 +120,9 @@
 	 */
 	Plugin.prototype._handleScroll = function(e) {
 		var self = this;
-		console.log('handlescroll');
+
 		if (this._shouldTriggerLoad()) {
-			this._beginLoadMore();			
+			this._beginLoadMore();
 			
 			// if a the doneLoading callback was provided, set an interval to check when to call it			
 			if (this.options.doneLoading) {
@@ -155,10 +145,36 @@
      * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
-		var elementBottom = this.$element.height(),
+		var elementBottom = this._getElementHeight(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-      	console.log(elementBottom + ' : ' + scrollBottom);
+
       	return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
+	};
+
+	/**
+	 * Retrieves the height of the element being scrolled. The method is cached 
+	 * after first call to avoid additional if statement execution.
+	 * 
+	 * @return {Number} The height of the element being scrolled
+	 * @private
+	 */
+	Plugin.prototype._getElementHeight = function() {
+		if (this.$element == this.$scrollContainer) {
+
+			Plugin.prototype._getElementHeight = function() {
+				return this.$element[0].scrollHeight;
+			};
+
+			return this.$element[0].scrollHeight;
+		
+		} else {
+
+			Plugin.prototype._getElementHeight = function() {
+				return this.$element.height();
+			};
+
+			return this.$element.height();
+		}
 	};
 
 	/**
@@ -199,6 +215,33 @@
 		this.options.doneLoading = null;
 		$.data(this.$element[0], namespace, null);
 		clearInterval(this.doneLoadingInt);
+	};
+
+	/*-------------------------------------------- */
+	/** Helpers */
+	/*-------------------------------------------- */
+	
+	function callMethod(instance, method, args) {
+		if ( $.isFunction(instance[method]) ) {
+			instance[method].apply(instance, args);
+		}
+	}
+
+	// Borrowed from Underscore.js (http://underscorejs.org/)
+	function debounce(func, wait, immediate) {
+		var timeout;
+
+		return function() {
+			var context = this, args = arguments;
+			var later = function() {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow) func.apply(context, args);
+		};
 	};
 
 	/*-------------------------------------------- */
