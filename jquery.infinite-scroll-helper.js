@@ -20,7 +20,8 @@
 		interval: 300, // The interval, in milliseconds, that the doneLoading callback will be called
 		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
 		loadingClassTarget: null, // A selector targeting the element that will receive the loadingClass
-		loadMore: $.noop // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element
+		loadMore: $.noop, // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element,
+		startingPageCount: 1 // The page count to start counting up from
 	};
 
 	/*-------------------------------------------- */
@@ -29,6 +30,7 @@
 
 	/**
 	 * The Plugin constructor
+	 * 
 	 * @param {HTMLElement} element The element that will be monitored
 	 * @param {Object} options The plugin options
 	 */
@@ -42,7 +44,8 @@
 		
 		this.loading = false;
 		this.doneLoadingInt = null;
-		this.pageCount = 1;
+		this.pageCount = this.options.startingPageCount;
+		this.destroyed = false;
 
 		this._init();
 	};
@@ -113,6 +116,10 @@
 		}, this.options.debounceInt));
 	};
 
+	Plugin.prototype._removeListeners = function() {
+		this.$scrollContainer.off('scroll.' + pluginName);
+	};
+
 	/**
 	 * Handles the scroll logic and determins when to trigger the load more callback
 	 *
@@ -147,32 +154,20 @@
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this._getElementHeight(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-
+      	
       	return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
 	/**
-	 * Retrieves the height of the element being scrolled. The method is cached 
-	 * after first call to avoid additional if statement execution.
+	 * Retrieves the height of the element being scrolled.
 	 * 
 	 * @return {Number} The height of the element being scrolled
 	 * @private
 	 */
 	Plugin.prototype._getElementHeight = function() {
 		if (this.$element == this.$scrollContainer) {
-
-			Plugin.prototype._getElementHeight = function() {
-				return this.$element[0].scrollHeight;
-			};
-
 			return this.$element[0].scrollHeight;
-		
 		} else {
-
-			Plugin.prototype._getElementHeight = function() {
-				return this.$element.height();
-			};
-
 			return this.$element.height();
 		}
 	};
@@ -187,6 +182,7 @@
 		this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
 		this.loading = true;
 		this.$loadingClassTarget.addClass(this.options.loadingClass);
+		this._removeListeners();
 	};
 
 	/**
@@ -198,6 +194,7 @@
 		clearInterval(this.doneLoadingInt);
       	this.loading = false;
       	this.$loadingClassTarget.removeClass(this.options.loadingClass);
+      	!this.destroyed && this._addListeners();
 	};
 
 	/*-------------------------------------------- */
@@ -210,11 +207,12 @@
 	 * @public
 	 */
 	Plugin.prototype.destroy = function() {
-		this.$scrollContainer.off('scroll.' + pluginName);
+		this._removeListeners();
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
 		$.data(this.$element[0], namespace, null);
 		clearInterval(this.doneLoadingInt);
+		this.destroyed = true;
 	};
 
 	/*-------------------------------------------- */
