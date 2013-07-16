@@ -21,7 +21,8 @@
 		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
 		loadingClassTarget: null, // A selector targeting the element that will receive the loadingClass
 		loadMore: $.noop, // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element,
-		startingPageCount: 1 // The page count to start counting up from
+		startingPageCount: 1, // The page count to start counting up from
+		triggerInitialLoad: false // Whether or not the plugin should make an initial call to loadMore
 	};
 
 	/*-------------------------------------------- */
@@ -44,7 +45,7 @@
 		
 		this.loading = false;
 		this.doneLoadingInt = null;
-		this.pageCount = this.options.startingPageCount;
+		this.pageCount = this.options.triggerInitialLoad ? this.options.startingPageCount - 1 : this.options.startingPageCount;
 		this.destroyed = false;
 
 		this._init();
@@ -61,6 +62,10 @@
 	 */
 	Plugin.prototype._init = function() {
 		this._addListeners();
+
+		if (this.options.triggerInitialLoad) {
+			this._beginLoadMore();
+		}
 	};
 
 	/**
@@ -265,5 +270,8 @@
 			}
 		});
 	};
+
+	// expose plugin constructor on window
+	window.InfiniteScrollHelper = window.InfiniteScrollHelper || Plugin;
 
 })(jQuery, window);
