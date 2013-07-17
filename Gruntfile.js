@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: ['jquery.<%= pkg.name %>.js'],
-				tasks: ['uglify'],
+				tasks: ['jshint', 'uglify'],
 				options: {
 					livereload: true
 				}
@@ -29,12 +29,17 @@ module.exports = function(grunt) {
 					unsafe: true
 				}
 			}
+		},
+
+		jshint: {
+			all: ['jquery.<%= pkg.name %>.js']
 		}
 	});
 
 	// load tasks
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 
 	// register tasks
 	grunt.registerTask('default', 'uglify');
