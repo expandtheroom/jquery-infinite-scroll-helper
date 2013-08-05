@@ -26,7 +26,8 @@ _(string)_ The class that will be added to the target element once `loadMore` ha
 _(string)_ A selector targeting the element that will receive the class specified by the `loadingClass` option.
 
 ### loadMore ###
-_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element being scrolled.  This callback is passed two arguments: 
+_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element being scrolled.  This callback is passed two arguments:
+
 * `pageCount`: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.
 * `done`: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the `doneLoading` callback.
 
