@@ -8,20 +8,34 @@ Options
 -------
 
 ### bottomBuffer ###
-_(integer)_ The number of pixels from the bottom of the window in which the `loadMore` function should be invoked.  The default is 0.
+_(number)_ The number of pixels from the bottom of the window in which the `loadMore` callback should be invoked.  The default is 0.
+
+### debounceInt ###
+_(number)_ The interval, in milliseconds, that the scroll event handler will be debounced.
 
 ### doneLoading ###
-_(function)_ A callback function that must return `true` or `false`, depending on whether loading has completed.  This callback is passed a `pageCount` argument.
+_(function)_ A callback that must return `true` or `false`, signaling whether loading has completed. This callback is passed a `pageCount` argument.
 
 ### interval
-_(integer)_ The interval, in milliseconds, that the doneLoading callback will be called by the plugin.  The default is 300.
-
-### loadMore ###
-_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element.  This callback is passed a `pageCount` argument which can be helpful
-when making requests to endpoints that accept a page parameter.
+_(number)_ The interval, in milliseconds, that the doneLoading callback will be called by the plugin. It will stop being called once it returns `true`. The default is 300.
 
 ### loadingClass ###
-_(string)_ The class name that will be applied to the element when `loadMore` is called. It is removed once `doneLoading` returns `true`.  The default is `loading`.
+_(string)_ The class that will be added to the target element once `loadMore` has been invoked. The default is `loading`.
+
+### loadingClassTarget ###
+_(string)_ A selector targeting the element that will receive the class specified by the `loadingClass` option.
+
+### loadMore ###
+_(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element being scrolled.  This callback is passed two arguments: 
+	* `pageCount`: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.
+	* `done`: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the `doneLoading` callback.
+
+### startingPageCount ###
+_(number)_ The starting page count that the plugin will increment each time the `loadMore` callback is invoked. The default is 1.
+
+### triggerInitialLoad ###
+_(boolean)_ Whether or not the plugin should make an initial call to the `loadMore` callback. This can be set to `true` if, for instance, you need to load the initial content asynchronously on page load.
+
 
 Methods
 -------
@@ -46,6 +60,24 @@ Usage
 		}
 	});
 
+or when using the `done` argument instead of the `doneLoading` callback
+
+	$('#my-element-to-watch').infiniteScrollHelper({
+		loadMore: function(page, done) {
+			// load some data, parse some data
+
+			// call the done callback to let the plugin know you are done loading
+			done();
+		}
+	});
+
+The plugin can also be instantiated using constructor invocation
+
+	new InfiniteScrollHelper($('#my-element-to-watch')[0], options);
+
+
+#### IE6/7 Note ####
+There will most likely be an issue with the scroll offset calculation when calling the plugin direclty on an element that is set to overflow: scroll-y in IE 6 & 7. In this case, it is best to wrap the children of the element in a container and call the plugin on this container instead.
 
 Dependencies
 ------------
@@ -55,6 +87,14 @@ Dependencies
 
 Changelog
 ---------
+### 1.1.0
+* Fixed/added the ability to use the plugin on elements with overflow scroll. Previously the plugin only worked when the element being watched was scrolled within the window.
+* A `done` argument is now passed to the `loadMore` callback. You can call this callback to signal that you are done loading content instead of defining the `doneLoading` callback.
+* Added the `debounceInt` option. The plugin now uses debouncing for the scroll event. You can specify the interval if you want it to be different than the default 100ms.
+* Added the `loadingClassTarget` option.
+* Added the `startingPageCount` option.
+* Added the `triggerInitialLoad` option.
+
 ### 1.0.5
 * Fixed issue #4 - destroy method was not properly destroying instance which prevented another instance from being created
 

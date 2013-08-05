@@ -13,16 +13,53 @@
 	/** Plugin Defaults */
 	/*-------------------------------------------- */
 
-	var	defaults = {
-		bottomBuffer: 0, // The amount of pixels from the bottom of the window the element must be before firing a loadMore event
-		debounceInt: 100, // The interval, in milliseconds that the scroll event handler will be debounced
-		doneLoading: null, // A callback that must return `true` or `false`, depending on whether loading has completed
-		interval: 300, // The interval, in milliseconds, that the doneLoading callback will be called
-		loadingClass: 'loading', // The class that will be added to the element after loadMore is invoked
-		loadingClassTarget: null, // A selector targeting the element that will receive the loadingClass
-		loadMore: $.noop, // A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element,
-		startingPageCount: 1, // The page count to start counting up from
-		triggerInitialLoad: false // Whether or not the plugin should make an initial call to loadMore
+ 	var	defaults = {
+ 		/**
+ 		 * The amount of pixels from the bottom of the scrolling element in which the loadMore callback will be invoked
+ 		 * @type {number}
+ 		 */
+		bottomBuffer: 0,
+		/**
+		 * The interval, in milliseconds that the scroll event handler will be debounced
+		 * @type {number}
+		 */
+		debounceInt: 100,
+		/**
+		 * A callback that must return `true` or `false`, signaling whether loading has completed. This callback is passed a `pageCount` argument.
+		 * @type {function}
+		 */
+		doneLoading: null,
+		/**
+		 * The interval, in milliseconds, that the doneLoading callback will be called
+		 * @type {number}
+		 */
+		interval: 300,
+		/**
+		 * The class that will be added to the target element once loadMore has been invoked
+		 * @type {string}
+		 */
+		loadingClass: 'loading',
+		/**
+		 * A selector targeting the element that will receive the class specified by the `loadingClass` option
+		 * @type {string}
+		 */
+		loadingClassTarget: null,
+		/**
+		 * A callback function that will be invoked when the scrollbar eclipses the bottom threshold of the scrolling element,
+		 * @type {function}
+		 */
+		loadMore: $.noop,
+		/**
+		 * The starting page count that the plugin increment each time loadMore is invoked
+		 * @type {number}
+		 */
+		startingPageCount: 1,
+		/**
+		 * Whether or not the plugin should make an initial call to loadMore. This can be set to true if, for instance, you need to load
+		 * the initial content asynchronously on page load
+		 * @type {boolean}
+		 */
+		triggerInitialLoad: false
 	};
 
 	/*-------------------------------------------- */
@@ -31,9 +68,9 @@
 
 	/**
 	 * The Plugin constructor
-	 * 
+	 * @constructor
 	 * @param {HTMLElement} element The element that will be monitored
-	 * @param {Object} options The plugin options
+	 * @param {object} options The plugin options
 	 */
 	function Plugin(element, options) {
 		this.options = $.extend({}, defaults, options);
@@ -57,21 +94,23 @@
 	
 	/**
 	 * Initializes the plugin
-	 * 
 	 * @private
 	 */
 	Plugin.prototype._init = function() {
 		this._addListeners();
 
+		/* 	Call initial begin load if option is true. If not, simulate a scroll incase
+			the scroll element container height is greater than the contents */
 		if (this.options.triggerInitialLoad) {
 			this._beginLoadMore();
+		} else {
+			this._handleScroll();
 		}
 	};
 
 	/**
 	 * Returns the element that should have the loading class applied to it when 
 	 * the plugin is in the loading state
-	 * 
 	 * @return {jQuery} The jQuery wrapped element
 	 * @private
 	 */
@@ -82,7 +121,6 @@
 	/**
 	 * Finds the element that acts as the scroll container for the infinite
 	 * scroll content
-	 * 
 	 * @return {jQuery} The jQuery object that wraps the scroll container
 	 */
 	Plugin.prototype._getScrollContainer = function() {
@@ -110,7 +148,6 @@
 
 	/**
 	 * Adds listeners required for plugin to function
-	 *
 	 * @private
 	 */
 	Plugin.prototype._addListeners = function() {
@@ -121,13 +158,16 @@
 		}, this.options.debounceInt));
 	};
 
+	/**
+	 * Removes all listeners required by the plugin
+	 * @private
+	 */
 	Plugin.prototype._removeListeners = function() {
 		this.$scrollContainer.off('scroll.' + pluginName);
 	};
 
 	/**
 	 * Handles the scroll logic and determins when to trigger the load more callback
-	 *
 	 * @private
 	 */
 	Plugin.prototype._handleScroll = function(e) {
@@ -152,8 +192,7 @@
 
 	/**
 	 * Determines if the user scrolled far enough to trigger the load more callback
-     *
-	 * @return {Boolean} true if the load more callback should be triggered, false otherwise
+	 * @return {boolean} true if the load more callback should be triggered, false otherwise
      * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
@@ -165,8 +204,7 @@
 
 	/**
 	 * Retrieves the height of the element being scrolled.
-	 * 
-	 * @return {Number} The height of the element being scrolled
+	 * @return {number} The height of the element being scrolled
 	 * @private
 	 */
 	Plugin.prototype._getElementHeight = function() {
@@ -179,7 +217,6 @@
 
 	/**
 	 * Initialize a call to the loadMore callback and set to loading state
-	 * 
 	 * @private
 	 */
 	Plugin.prototype._beginLoadMore = function() {
@@ -192,7 +229,6 @@
 
 	/**
 	 * Return the plugin to the not loading state
-	 * 
 	 * @private
 	 */
 	Plugin.prototype._endLoadMore = function() {
@@ -208,7 +244,6 @@
 
 	/**
 	 * Destroys the plugin instance
-	 *
 	 * @public
 	 */
 	Plugin.prototype.destroy = function() {
@@ -224,6 +259,7 @@
 	/** Helpers */
 	/*-------------------------------------------- */
 	
+	// A utility method for calling methods on the plugin instance
 	function callMethod(instance, method, args) {
 		if ( $.isFunction(instance[method]) ) {
 			instance[method].apply(instance, args);

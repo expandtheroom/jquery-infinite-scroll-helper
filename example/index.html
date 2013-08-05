@@ -106,7 +106,7 @@
 
 			(function() {
 				var pageCount;
-			
+				// using jQuery plugin instantiation
 				$('#wrapper').infiniteScrollHelper({
 					
 					loadMore: function(page, done) {
@@ -114,6 +114,7 @@
 						pageCount = page;
 						$('.loader').text('Loading Page ' + page + '...');
 
+						// simulating loading of some content
 						setTimeout(
 							function() {
 								var colorIndex = (pageCount - 1) % colors.length;
@@ -129,14 +130,15 @@
 						, 2000);
 					},
 					bottomBuffer: 80,
+					// using the triggerInitialLoad option
 					triggerInitialLoad: true
 				})
 			}());
 
 			(function() {
 				var pageCount;
-			
-				$('#ov-content-wrapper').infiniteScrollHelper({
+				// using standard constructor instantiation
+				var ish = new InfiniteScrollHelper($('#ov-content-wrapper')[0], {
 					
 					loadMore: function(page, done) {
 						console.log('load more');
@@ -144,6 +146,7 @@
 						pageCount = page;
 						$('.load-more').text('Loading Page ' + page + '...');
 
+						// simulating loading of some content
 						setTimeout(
 							function() {
 								var colorIndex = (pageCount - 1) % colors.length;
@@ -151,7 +154,7 @@
 
 								if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
 									console.log('desroying');
-									$('#ov-content-wrapper').infiniteScrollHelper('destroy');
+									ish.destroy();
 								}
 
 								done();
@@ -160,9 +163,9 @@
 					},
 					bottomBuffer: 80,
 					loadingClassTarget: '#ov-hidden'
-				})
+				});
+
 			}());
-			
 		});
 
 	</script>
