@@ -27,8 +27,8 @@ _(string)_ A selector targeting the element that will receive the class specifie
 
 ### loadMore ###
 _(function)_ A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element being scrolled.  This callback is passed two arguments: 
-	* `pageCount`: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.
-	* `done`: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the `doneLoading` callback.
+* `pageCount`: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.
+* `done`: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the `doneLoading` callback.
 
 ### startingPageCount ###
 _(number)_ The starting page count that the plugin will increment each time the `loadMore` callback is invoked. The default is 1.
