@@ -65,10 +65,21 @@ or when using the `done` argument instead of the `doneLoading` callback
 
 	$('#my-element-to-watch').infiniteScrollHelper({
 		loadMore: function(page, done) {
-			// load some data, parse some data
-
-			// call the done callback to let the plugin know you are done loading
-			done();
+			// you should use the page argument to either select an anchor/href and load 
+			// the contents of that url or make a call to an API that accepts a page number
+			var nextPageUrl = $('.pagination a').eq(page - 1).attr('href');
+			$.get(url, function(data) {
+				$(data).find('.items').appendTo('#my-element-to-watch');
+				// call the done callback to let the plugin know you are done loading
+				done();
+			});
+			
+			// or an API perhaps
+			$.getJSON('http://myawesomeapi.com/data?p=' + page, function(data) {
+				// parse json data and create new html then append
+				
+				done();
+			});
 		}
 	});
 
