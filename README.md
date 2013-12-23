@@ -67,8 +67,10 @@ or when using the `done` argument instead of the `doneLoading` callback
 		loadMore: function(page, done) {
 			// you should use the page argument to either select an anchor/href and load 
 			// the contents of that url or make a call to an API that accepts a page number
+			
 			var nextPageUrl = $('.pagination a').eq(page - 1).attr('href');
-			$.get(url, function(data) {
+			
+			$.get(nextPageUrl, function(data) {
 				$(data).find('.items').appendTo('#my-element-to-watch');
 				// call the done callback to let the plugin know you are done loading
 				done();
