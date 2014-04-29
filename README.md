@@ -31,6 +31,9 @@ _(function)_ A callback function that is invoked when the scrollbar eclipses the
 * `pageCount`: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.
 * `done`: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the `doneLoading` callback.
 
+### loadMoreDelay ###
+_(number)_ The amount of time, in milliseconds, before the loadMore callback is invoked once the bottom of the scroll container has been reached.
+
 ### startingPageCount ###
 _(number)_ The starting page count that the plugin will increment each time the `loadMore` callback is invoked. The default is 1.
 

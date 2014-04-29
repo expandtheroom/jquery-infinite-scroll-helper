@@ -13,11 +13,11 @@
 	/** Plugin Defaults */
 	/*-------------------------------------------- */
 
- 	var	defaults = {
- 		/**
- 		 * The amount of pixels from the bottom of the scrolling element in which the loadMore callback will be invoked
- 		 * @type {number}
- 		 */
+	var	defaults = {
+		/**
+		 * The amount of pixels from the bottom of the scrolling element in which the loadMore callback will be invoked
+		 * @type {number}
+		 */
 		bottomBuffer: 0,
 		/**
 		 * The interval, in milliseconds that the scroll event handler will be debounced
@@ -44,6 +44,11 @@
 		 * @type {string}
 		 */
 		loadingClassTarget: null,
+		/**
+		 * The amount of time, in milliseconds, before the loadMore callback is invoked once the bottom of the scroll container has been reached
+		 * @type {number}
+		 */
+		loadMoreDelay: 0,
 		/**
 		 * A callback function that will be invoked when the scrollbar eclipses the bottom threshold of the scrolling element,
 		 * @type {function}
@@ -86,7 +91,7 @@
 		this.destroyed = false;
 
 		this._init();
-	};
+	}
 
 	/*-------------------------------------------- */
 	/** Private Methods */
@@ -99,10 +104,10 @@
 	Plugin.prototype._init = function() {
 		this._addListeners();
 
-		/* 	Call initial begin load if option is true. If not, simulate a scroll incase
-			the scroll element container height is greater than the contents */
+		/* Call initial begin load if option is true. If not, simulate a scroll incase
+		the scroll element container height is greater than the contents */
 		if (this.options.triggerInitialLoad) {
-			this._beginLoadMore();
+			this._beginLoadMore(this.options.loadMoreDelay);
 		} else {
 			this._handleScroll();
 		}
@@ -174,7 +179,7 @@
 		var self = this;
 
 		if (this._shouldTriggerLoad()) {
-			this._beginLoadMore();
+			this._beginLoadMore(this.options.loadMoreDelay);
 			
 			// if a the doneLoading callback was provided, set an interval to check when to call it			
 			if (this.options.doneLoading) {
@@ -187,7 +192,7 @@
 					this.options.interval
 				);
 			}
-  		}
+		}
 	};
 
 	/**
@@ -198,8 +203,8 @@
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this._getElementHeight(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-      	
-      	return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
+		
+		return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
 	/**
@@ -217,13 +222,19 @@
 
 	/**
 	 * Initialize a call to the loadMore callback and set to loading state
+	 * @param  {number} delay The amount of time, in milliseconds, to wait before calling the load more callback
 	 * @private
 	 */
-	Plugin.prototype._beginLoadMore = function() {
-		this.pageCount++;
-		this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
-		this.loading = true;
-		this.$loadingClassTarget.addClass(this.options.loadingClass);
+	Plugin.prototype._beginLoadMore = function(delay) {
+		delay = delay || 0;
+
+		setTimeout($.proxy(function() {
+			this.pageCount++;
+			this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
+			this.loading = true;
+			this.$loadingClassTarget.addClass(this.options.loadingClass);
+		}, this), delay);
+		
 		this._removeListeners();
 	};
 
@@ -233,9 +244,9 @@
 	 */
 	Plugin.prototype._endLoadMore = function() {
 		clearInterval(this.doneLoadingInt);
-      	this.loading = false;
-      	this.$loadingClassTarget.removeClass(this.options.loadingClass);
-      	!this.destroyed && this._addListeners();
+		this.loading = false;
+		this.$loadingClassTarget.removeClass(this.options.loadingClass);
+		!this.destroyed && this._addListeners();
 	};
 
 	/*-------------------------------------------- */
@@ -281,7 +292,7 @@
 			timeout = setTimeout(later, wait);
 			if (callNow) func.apply(context, args);
 		};
-	};
+	}
 
 	/*-------------------------------------------- */
 	/** Plugin Definition */
