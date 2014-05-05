@@ -272,7 +272,7 @@
 	
 	// A utility method for calling methods on the plugin instance
 	function callMethod(instance, method, args) {
-		if ( $.isFunction(instance[method]) ) {
+		if ( instance && $.isFunction(instance[method]) ) {
 			instance[method].apply(instance, args);
 		}
 	}
@@ -310,7 +310,7 @@
 
 			var plugin = $.data(this, namespace);
 
-			if (!plugin) {
+			if (!plugin && !method) {
 				$.data(this, namespace, new Plugin(this, options));
 			} else if (method) {
 				callMethod(plugin, method, Array.prototype.slice.call(methodArgs, 1));
