@@ -231,10 +231,10 @@
 		setTimeout($.proxy(function() {
 			this.pageCount++;
 			this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
-			this.loading = true;
 			this.$loadingClassTarget.addClass(this.options.loadingClass);
 		}, this), delay);
 		
+		this.loading = true;
 		this._removeListeners();
 	};
 
