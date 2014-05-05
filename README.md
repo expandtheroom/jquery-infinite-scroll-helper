@@ -104,29 +104,42 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.0
+* Added a `loadMoreDelay` option. This allows you to set a delay before the `loadMore` callback is invoked.
+* Fixed issue where calling destroy before the plugin was instantiated would cause unintentional instantiation of plugin.
+* Added plugin as package on Bower.
+
+
 ### 1.1.0
 * Fixed/added the ability to use the plugin on elements with overflow scroll. Previously the plugin only worked when the element being watched was scrolled within the window.
-* A `done` argument is now passed to the `loadMore` callback. You can call this callback to signal that you are done loading content instead of defining the `doneLoading` callback.
+* A `done` argument is now passed to the `loadMore` callback. You can invoke this callback to signal that you are done loading content instead of defining the `doneLoading` callback option.
 * Added the `debounceInt` option. The plugin now uses debouncing for the scroll event. You can specify the interval if you want it to be different than the default 100ms.
-* Added the `loadingClassTarget` option.
-* Added the `startingPageCount` option.
-* Added the `triggerInitialLoad` option.
+* Added a `loadingClassTarget` option.
+* Added a `startingPageCount` option.
+* Added a `triggerInitialLoad` option.
 
 ### 1.0.5
 * Fixed issue #4 - destroy method was not properly destroying instance which prevented another instance from being created
 
 ### 1.0.4
-* `doneLoading` callback now receives pageCount as a parameter
+* The `doneLoading` callback now receives pageCount as a parameter.
 
 ### 1.0.3
-* Changing details in manifest file
-* Doc updates
+* Changed details in manifest file.
+* Doc updates.
 
 ### 1.0.2
-* Fixed manifest file keyword error
+* Fixed manifest file keyword error.
 
 ### 1.0.1
-* Regenerated minified/production script to match development version
+* Regenerated minified/production script to match development version.
 
 ### 1.0.0
-* Initial Release
+* Initial Release.
+
+License
+-------
+Copyright (c) 2014 Expand The Room, LLC
+
+Licensed under the MIT license.
+
