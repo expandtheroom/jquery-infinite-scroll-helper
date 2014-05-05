@@ -104,11 +104,13 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.1
+* Updated bower.json homepage URL to point to Github page.
+
 ### 1.2.0
 * Added a `loadMoreDelay` option. This allows you to set a delay before the `loadMore` callback is invoked.
 * Fixed issue where calling destroy before the plugin was instantiated would cause unintentional instantiation of plugin.
 * Added plugin as package on Bower.
-
 
 ### 1.1.0
 * Fixed/added the ability to use the plugin on elements with overflow scroll. Previously the plugin only worked when the element being watched was scrolled within the window.

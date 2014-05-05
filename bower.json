@@ -1,11 +1,14 @@
 {
   "name": "jQuery Infinite Scroll Helper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "authors": [
     "Ryan Ogden <ryan@expandtheroom.com>"
   ],
   "description": "A lightweight implementation of the infinite scroll mechanic.  By providing two essential callbacks, loadMore and doneLoading, the jQuery Infinite Scroll Helper plugin makes it a breeze to add infinite scrolling functionality to your page.",
-  "main": "jquery.infinite-scroll-helper.js",
+  "main": [
+    "jquery.infinite-scroll-helper.js",
+    "jquery.infinite-scroll-helper.min.js"
+  ],
   "moduleType": [
     "globals"
   ],
