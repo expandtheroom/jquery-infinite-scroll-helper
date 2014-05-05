@@ -15,7 +15,7 @@
     "client"
   ],
   "license": "MIT",
-  "homepage": "expandtheroom.com",
+  "homepage": "https://github.com/expandtheroom/jquery-infinite-scroll-helper",
   "ignore": [
     "**/.*",
     "node_modules",
