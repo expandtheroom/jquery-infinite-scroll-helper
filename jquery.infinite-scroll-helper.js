@@ -254,7 +254,17 @@
 		clearInterval(this.doneLoadingInt);
 		this.destroyed = true;
 	};
-
+	
+	/**
+	 * Refresh the plugin instance
+	 * You can call this function instead of destroying/creating new instance if user clicks "go back" button.
+	 * @public
+	 */
+	Plugin.prototype.refresh = function() {
+		this._addListeners();
+		this.destroyed = false;
+	};	
+	
 	/*-------------------------------------------- */
 	/** Helpers */
 	/*-------------------------------------------- */
