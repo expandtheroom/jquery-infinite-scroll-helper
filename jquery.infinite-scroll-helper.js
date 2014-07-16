@@ -147,7 +147,6 @@
 		// if the target element or any parent aren't overflow-y:scroll, 
 		// assume the window as the scroll container
 		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : this.$win;
-
 		return $scrollContainer;
 	};
 
@@ -157,10 +156,12 @@
 	 */
 	Plugin.prototype._addListeners = function() {
 		var self = this;
-		
-		this.$scrollContainer.on('scroll.' + pluginName, debounce(function() {
+
+		this._handler = debounce(function() {
 			self._handleScroll();
-		}, this.options.debounceInt));
+		}, this.options.debounceInt);
+
+		this.$scrollContainer.on('scroll.' + pluginName, this._handler);
 	};
 
 	/**
@@ -168,7 +169,7 @@
 	 * @private
 	 */
 	Plugin.prototype._removeListeners = function() {
-		this.$scrollContainer.off('scroll.' + pluginName);
+		this.$scrollContainer.off('scroll.' + pluginName, this._handler);
 	};
 
 	/**
@@ -177,7 +178,6 @@
 	 */
 	Plugin.prototype._handleScroll = function(e) {
 		var self = this;
-
 		if (this._shouldTriggerLoad()) {
 			this._beginLoadMore(this.options.loadMoreDelay);
 			
@@ -203,7 +203,6 @@
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this._getElementHeight(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-		
 		return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
@@ -261,7 +260,7 @@
 		this._removeListeners();
 		this.options.loadMore = null;
 		this.options.doneLoading = null;
-		$.data(this.$element[0], namespace, null);
+		$(this.$element[0]).data(namespace, null);
 		clearInterval(this.doneLoadingInt);
 		this.destroyed = true;
 	};
@@ -308,10 +307,10 @@
 
 		return this.each(function() {
 
-			var plugin = $.data(this, namespace);
+			var plugin = $(this).data(namespace);
 
 			if (!plugin && !method) {
-				$.data(this, namespace, new Plugin(this, options));
+				$(this).data(namespace, new Plugin(this, options));
 			} else if (method) {
 				callMethod(plugin, method, Array.prototype.slice.call(methodArgs, 1));
 			}
@@ -321,4 +320,4 @@
 	// expose plugin constructor on window
 	window.InfiniteScrollHelper = window.InfiniteScrollHelper || Plugin;
 
-})(jQuery, window);
+})( (window.jQuery || window.Zepto), window );
