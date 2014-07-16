@@ -147,6 +147,7 @@
 		// if the target element or any parent aren't overflow-y:scroll, 
 		// assume the window as the scroll container
 		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : this.$win;
+
 		return $scrollContainer;
 	};
 
@@ -178,6 +179,7 @@
 	 */
 	Plugin.prototype._handleScroll = function(e) {
 		var self = this;
+
 		if (this._shouldTriggerLoad()) {
 			this._beginLoadMore(this.options.loadMoreDelay);
 			
@@ -203,6 +205,7 @@
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this._getElementHeight(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
+			
 		return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
