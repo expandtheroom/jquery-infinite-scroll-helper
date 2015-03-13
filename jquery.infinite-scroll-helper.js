@@ -50,7 +50,7 @@
 		 */
 		loadMoreDelay: 0,
 		/**
-		 * A callback function that will be invoked when the scrollbar eclipses the bottom threshold of the scrolling element,
+		 * A callback function that will be invoked when the scrollbar eclipses the bottom threshold of the scrolling element
 		 * @type {function}
 		 */
 		loadMore: $.noop,
@@ -172,7 +172,7 @@
 	};
 
 	/**
-	 * Handles the scroll logic and determins when to trigger the load more callback
+	 * Handles the scroll logic and determine when to trigger the load more callback
 	 * @private
 	 */
 	Plugin.prototype._handleScroll = function(e) {
@@ -198,7 +198,7 @@
 	/**
 	 * Determines if the user scrolled far enough to trigger the load more callback
 	 * @return {boolean} true if the load more callback should be triggered, false otherwise
-     * @private
+	 * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
 		var elementBottom = this._getElementHeight(),
