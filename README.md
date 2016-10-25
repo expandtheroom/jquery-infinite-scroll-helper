@@ -104,6 +104,10 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.2
+* Change how the scrollable element is detected by accounting for overflow scroll OR auto.
+* Fix issue where position fixed elements would not trigger the `loadMore` callback when the window was scrolled past y0.
+
 ### 1.2.1
 * Updated bower.json homepage URL to point to Github page.
 
