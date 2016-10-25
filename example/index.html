@@ -38,7 +38,7 @@
 			border: 1px solid white;
 		}
 		#ov-content-wrapper {
-			overflow-y: scroll;
+			overflow-y: auto;
 			position: relative;
 			height: 100%;
 		}
@@ -153,7 +153,7 @@
 								$('#ov-content-wrapper').append('<div class="content" style=" background-color: ' + colors[colorIndex] + ';">');
 
 								if (pageCount == totalPages) { // if we are at the last page, destroy the plugin instance
-									console.log('desroying');
+									console.log('destroying');
 									ish.destroy();
 								}
 

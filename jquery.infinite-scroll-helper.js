@@ -129,18 +129,19 @@
 	 * @return {jQuery} The jQuery object that wraps the scroll container
 	 */
 	Plugin.prototype._getScrollContainer = function() {
-		var $scrollContainer = null;
+		var self = this,
+			$scrollContainer = null;
 		
 		// see if the target element is overflow-y:scroll. If so, it is the 
 		// scroll container
-		if (this.$element.css('overflow-y') == 'scroll') {
+		if (this._isScrollableElement(this.$element)) {
 			$scrollContainer = this.$element;
 		}
 
 		// see if a parent is overflow-y:scroll. If so, it is the scroll container
 		if (!$scrollContainer) {
 			$scrollContainer = this.$element.parents().filter(function() { 
-				return $(this).css('overflow-y') == 'scroll';
+				return self._isScrollableElement($(this));
 			});
 		}
 
@@ -149,6 +150,16 @@
 		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : this.$win;
 
 		return $scrollContainer;
+	};
+
+	/**
+	 * Determines if the provided $el is scrollable or not
+	 * @param {jQuery} $el The jQuery instance to check
+	 * @returns {boolean} Returns true if scrollable, false if not
+	 * @private
+	 */
+	Plugin.prototype._isScrollableElement = function($el) {
+		return (/(auto|scroll)/).test($el.css('overflow') + $el.css('overflow-y'));
 	};
 
 	/**
@@ -172,7 +183,7 @@
 	};
 
 	/**
-	 * Handles the scroll logic and determins when to trigger the load more callback
+	 * Handles the scroll logic and determines when to trigger the load more callback
 	 * @private
 	 */
 	Plugin.prototype._handleScroll = function(e) {
@@ -201,14 +212,14 @@
      * @private
 	 */
 	Plugin.prototype._shouldTriggerLoad = function() {
-		var elementBottom = this._getElementHeight(),
+		var elementBottom = this._getElementBottom(),
 			scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
-		
+
 		return (!this.loading && scrollBottom >= elementBottom && this.$element.is(':visible'));
 	};
 
 	/**
-	 * Retrieves the height of the element being scrolled.
+	 * Retrieves the height of the element being scrolled
 	 * @return {number} The height of the element being scrolled
 	 * @private
 	 */
@@ -218,6 +229,19 @@
 		} else {
 			return this.$element.height();
 		}
+	};
+
+	/**
+	 * Calculate the pixel height to the bottom of the scrolling element
+	 * @returns {number} The pixel height to the bottom of the scrolling element.
+	 * @private
+	 */
+	Plugin.prototype._getElementBottom = function() {
+		if (this.$element == this.$scrollContainer) {
+			return this._getElementHeight();
+		}
+
+		return this._getElementHeight() + this.$element.offset().top;
 	};
 
 	/**
