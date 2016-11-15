@@ -1,4 +1,12 @@
-QUnit.module('Plugin Tests');
+QUnit.module('Plugin Tests', {
+    before: function() {
+        this.$fixture = $('#qunit-fixture');
+    },
+
+    beforeEach: function() {
+        this.$scrollDiv = $('<div>');
+    }
+});
 
 QUnit.test('plugin function is defined', function(assert) {
     assert.ok(jQuery.fn.infiniteScrollHelper);
@@ -9,16 +17,16 @@ QUnit.test('plugin is defined on window', function(assert) {
 });
 
 QUnit.test('plugin can be destroyed', function(assert) {
-    var $div = jQuery('<div>').infiniteScrollHelper();
-    $div.infiniteScrollHelper('destroy');
+    this.$scrollDiv.infiniteScrollHelper();
+    this.$scrollDiv.infiniteScrollHelper('destroy');
 
-    assert.equal(jQuery.data($div[0], 'plugin_infiniteScrollHelper'), null, 'plugin data is null');
+    assert.equal(jQuery.data(this.$scrollDiv[0], 'plugin_infiniteScrollHelper'), null, 'plugin data is null');
 });
 
 QUnit.test('plugin triggers initial load callback', function(assert) {
     var done = assert.async();
 
-    var $div = jQuery('<div>').infiniteScrollHelper({
+    this.$scrollDiv.infiniteScrollHelper({
         triggerInitialLoad: true,
         loadMore: function(page) {
             assert.equal(page, 1, 'the page should equal 1');
@@ -30,7 +38,7 @@ QUnit.test('plugin triggers initial load callback', function(assert) {
 QUnit.test('plugin provides correct page number on initial load', function(assert) {
     var done = assert.async();
 
-    var $div = $('<div>').infiniteScrollHelper({
+    this.$scrollDiv.infiniteScrollHelper({
         triggerInitialLoad: true,
         startingPageCount: 2,
         loadMore: function(page) {
@@ -40,37 +48,99 @@ QUnit.test('plugin provides correct page number on initial load', function(asser
     })
 });
 
-QUnit.test('plugin finds correct scroll container', function(assert) {
-    var $fixture = $('#qunit-fixture'),
-        $scrollDiv = $('<div>').css({
-            'overflow-y': 'scroll'
-        });
+QUnit.test('plugin increments page number correctly', function(assert) {
+    var done = assert.async();
 
-    $fixture.append($scrollDiv);
+    var is = new InfiniteScrollHelper(this.$scrollDiv[0], {
+        loadMore: function(page) {
+            assert.equal(page, 2, 'the page should equal 2');
+            done();
+        }
+    });
 
-    var is = new InfiniteScrollHelper($scrollDiv[0]);
+    is._beginLoadMore();
+});
 
-    assert.equal(is._getScrollContainer()[0], $scrollDiv[0], 'scroll container should be scroll div');
+QUnit.test('plugin uses self as scroll container', function(assert) {
+    this.$scrollDiv.css({
+        'overflow-y': 'scroll'
+    });
+
+    this.$fixture.append(this.$scrollDiv);
+
+    var is = new InfiniteScrollHelper(this.$scrollDiv[0]);
+
+    assert.equal(is._getScrollContainer()[0], this.$scrollDiv[0], 'scroll container should be self');
 });
 
 QUnit.test('plugin uses parent scroll container when element is not scrollable', function(assert) {
-    var $fixture = $('#qunit-fixture'),
-        $scrollDiv = $('<div>');
+    var $scrollDivParent = $('<div>').css('overflow-y', 'scroll');
 
-    $fixture.append($scrollDiv);
+    $scrollDivParent.append(this.$scrollDiv);
 
-    var is = new InfiniteScrollHelper($scrollDiv[0]);
+    this.$fixture.append($scrollDivParent);
+
+    var is = new InfiniteScrollHelper(this.$scrollDiv[0]);
+
+    assert.equal(is._getScrollContainer()[0], $scrollDivParent[0], 'scroll container should be parent');
+});
+
+QUnit.test('plugin uses window scroll container when element is not scrollable', function(assert) {
+    this.$fixture.append(this.$scrollDiv);
+
+    var is = new InfiniteScrollHelper(this.$scrollDiv[0]);
 
     assert.equal(is._getScrollContainer()[0], window, 'scroll container should be window');
 });
 
-QUnit.test('plugin uses window scroll container when element is not scrollable', function(assert) {
-    var $fixture = $('#qunit-fixture'),
-        $scrollDiv = $('<div>');
+QUnit.test('plugin triggers loadMore callback at specified threshold', function(assert) {
+    var done = assert.async();
 
-    $fixture.append($scrollDiv);
+    var containerHeight = 500,
+        contentHeight = 800,
+        bottomBuffer = 80,
+        scrollTriggerDistance = contentHeight - containerHeight - bottomBuffer;
 
-    var is = new InfiniteScrollHelper($scrollDiv[0]);
+    this.$scrollDiv.css({
+        height: containerHeight,
+        width: 300,
+        overflow: 'scroll',
+    });
 
-    assert.equal(is._getScrollContainer()[0], window, 'scroll container should be window');
+    this.$scrollDiv.append($('<div>').css({
+        height: contentHeight,
+        width: 200
+    }));
+
+    this.$scrollDiv.infiniteScrollHelper({
+        bottomBuffer: bottomBuffer,
+        loadMore: function() {
+            assert.ok(true, 'loadMore callback was invoked');
+            done();
+        }
+    });
+
+    setTimeout(function() {
+        this.$scrollDiv.scrollTop(scrollTriggerDistance);
+    }.bind(this), 1000);
+
+    this.$fixture.append(this.$scrollDiv);
+});
+
+QUnit.test('plugin adds loading class to correct element', function(assert) {
+    var done = assert.async(),
+        _this = this;
+
+    this.$scrollDiv.infiniteScrollHelper({
+        triggerInitialLoad: true,
+        loadMore: function(page, doneLoading) {
+            setTimeout(function () {
+                assert.ok(_this.$scrollDiv.hasClass('loading'), 'scroll div has class loading');
+                doneLoading();
+                done();
+            }, 500);
+        }
+    });
+
+    this.$fixture.append(this.$scrollDiv);
 });
