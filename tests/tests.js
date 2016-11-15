@@ -93,6 +93,16 @@ QUnit.test('plugin uses window scroll container when element is not scrollable',
     assert.equal(is._getScrollContainer()[0], window, 'scroll container should be window');
 });
 
+QUnit.test('plugin uses provided scrollContainer', function(assert) {
+    var scrollDiv = document.createElement('div');
+
+    var is = new InfiniteScrollHelper(this.$scrollDiv[0], {
+        scrollContainer: scrollDiv
+    });
+
+    assert.equal(is._getScrollContainer()[0], scrollDiv, 'scroll container is scrollDiv');
+});
+
 QUnit.test('plugin triggers loadMore callback at specified threshold', function(assert) {
     var done = assert.async();
 

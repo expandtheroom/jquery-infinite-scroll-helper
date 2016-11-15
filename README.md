@@ -34,6 +34,10 @@ _(function)_ A callback function that is invoked when the scrollbar eclipses the
 ### loadMoreDelay ###
 _(number)_ The amount of time, in milliseconds, before the loadMore callback is invoked once the bottom of the scroll container has been reached.
 
+### scrollContainer ###
+_(string|HTMLElement)_ If provided, the element that the scroll listener will be attached to. This can either be a selector or a DOM element reference. 
+If not specified, the plugin will try to find the first scrollable parent if the element itself is not scrollable.
+
 ### startingPageCount ###
 _(number)_ The starting page count that the plugin will increment each time the `loadMore` callback is invoked. The default is 1.
 
@@ -104,6 +108,10 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.3
+* Added a `scrollContainer` option.
+* Added unit tests.
+
 ### 1.2.2
 * Change how the scrollable element is detected by accounting for overflow scroll OR auto.
 * Fix issue where position fixed elements would not trigger the `loadMore` callback when the window was scrolled past y0.

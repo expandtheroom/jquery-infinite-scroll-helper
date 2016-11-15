@@ -55,6 +55,12 @@
 		 */
 		loadMore: $.noop,
 		/**
+		 * If provided, the element that the scroll listener will be attached to. This can either be a selector or a DOM
+		 * element reference. If not specified, the plugin will try to find the first scrollable parent if the element itself
+		 * is not scrollable.
+		 */
+		scrollContainer: null,
+		/**
 		 * The starting page count that the plugin increment each time loadMore is invoked
 		 * @type {number}
 		 */
@@ -129,23 +135,25 @@
 	 * @return {jQuery} The jQuery object that wraps the scroll container
 	 */
 	Plugin.prototype._getScrollContainer = function() {
+		// Use the options scrollContainer if provided
+		if (this.options.scrollContainer) return $(this.options.scrollContainer);
+
 		var self = this,
 			$scrollContainer = null;
 		
-		// see if the target element is overflow-y:scroll. If so, it is the 
-		// scroll container
+		// see if the target element is scrollable. If so, it is the scroll container
 		if (this._isScrollableElement(this.$element)) {
 			$scrollContainer = this.$element;
 		}
 
-		// see if a parent is overflow-y:scroll. If so, it is the scroll container
+		// Find first parent that is scrollable and use it as the scroll container
 		if (!$scrollContainer) {
 			$scrollContainer = this.$element.parents().filter(function() { 
 				return self._isScrollableElement($(this));
 			});
 		}
 
-		// if the target element or any parent aren't overflow-y:scroll, 
+		// if the target element or any parent aren't scrollable,
 		// assume the window as the scroll container
 		$scrollContainer = $scrollContainer.length > 0 ? $scrollContainer : this.$win;
 
