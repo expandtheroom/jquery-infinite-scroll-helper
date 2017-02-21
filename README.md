@@ -35,7 +35,7 @@ _(function)_ A callback function that is invoked when the scrollbar eclipses the
 _(number)_ The amount of time, in milliseconds, before the loadMore callback is invoked once the bottom of the scroll container has been reached.
 
 ### scrollContainer ###
-_(string|HTMLElement)_ If provided, the element that the scroll listener will be attached to. This can either be a selector or a DOM element reference. 
+_(string|HTMLElement)_ If provided, the element that the scroll listener will be attached to. This can either be a selector or a DOM element reference.
 If not specified, the plugin will try to find the first scrollable parent if the element itself is not scrollable.
 
 ### startingPageCount ###
@@ -72,21 +72,21 @@ or when using the `done` argument instead of the `doneLoading` callback
 
 	$('#my-element-to-watch').infiniteScrollHelper({
 		loadMore: function(page, done) {
-			// you should use the page argument to either select an anchor/href and load 
+			// you should use the page argument to either select an anchor/href and load
 			// the contents of that url or make a call to an API that accepts a page number
-			
+
 			var nextPageUrl = $('.pagination a').eq(page - 1).attr('href');
-			
+
 			$.get(nextPageUrl, function(data) {
 				$(data).find('.items').appendTo('#my-element-to-watch');
 				// call the done callback to let the plugin know you are done loading
 				done();
 			});
-			
+
 			// or an API perhaps
 			$.getJSON('http://myawesomeapi.com/data?p=' + page, function(data) {
 				// parse json data and create new html then append
-				
+
 				done();
 			});
 		}
@@ -108,13 +108,18 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.4
+* Fixed issue where loading class would not be removed after calling the done callback synchronously.
+* Removed jQuery plugin repo JSON file.
+* Added .editorconfig file.
+
 ### 1.2.3
 * Added a `scrollContainer` option.
 * Added unit tests.
 
 ### 1.2.2
-* Change how the scrollable element is detected by accounting for overflow scroll OR auto.
-* Fix issue where position fixed elements would not trigger the `loadMore` callback when the window was scrolled past y0.
+* Changed how the scrollable element is detected by accounting for overflow scroll OR auto.
+* Fixed issue where position fixed elements would not trigger the `loadMore` callback when the window was scrolled past y0.
 
 ### 1.2.1
 * Updated bower.json homepage URL to point to Github page.
@@ -156,4 +161,3 @@ License
 Copyright (c) 2014 Expand The Room, LLC
 
 Licensed under the MIT license.
-

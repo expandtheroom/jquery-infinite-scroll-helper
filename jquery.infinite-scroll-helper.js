@@ -3,12 +3,12 @@
  */
 
 ;(function($, window) {
-	
+
 	'use strict';
 
 	var pluginName = 'infiniteScrollHelper',
 		namespace = 'plugin_' + pluginName;
-	
+
 	/*-------------------------------------------- */
 	/** Plugin Defaults */
 	/*-------------------------------------------- */
@@ -85,12 +85,12 @@
 	 */
 	function Plugin(element, options) {
 		this.options = $.extend({}, defaults, options);
-		
+
 		this.$element = $(element);
 		this.$win = $(window);
 		this.$loadingClassTarget = this._getLoadingClassTarget();
 		this.$scrollContainer = this._getScrollContainer();
-		
+
 		this.loading = false;
 		this.doneLoadingInt = null;
 		this.pageCount = this.options.triggerInitialLoad ? this.options.startingPageCount - 1 : this.options.startingPageCount;
@@ -102,7 +102,7 @@
 	/*-------------------------------------------- */
 	/** Private Methods */
 	/*-------------------------------------------- */
-	
+
 	/**
 	 * Initializes the plugin
 	 * @private
@@ -120,7 +120,7 @@
 	};
 
 	/**
-	 * Returns the element that should have the loading class applied to it when 
+	 * Returns the element that should have the loading class applied to it when
 	 * the plugin is in the loading state
 	 * @return {jQuery} The jQuery wrapped element
 	 * @private
@@ -140,7 +140,7 @@
 
 		var self = this,
 			$scrollContainer = null;
-		
+
 		// see if the target element is scrollable. If so, it is the scroll container
 		if (this._isScrollableElement(this.$element)) {
 			$scrollContainer = this.$element;
@@ -148,7 +148,7 @@
 
 		// Find first parent that is scrollable and use it as the scroll container
 		if (!$scrollContainer) {
-			$scrollContainer = this.$element.parents().filter(function() { 
+			$scrollContainer = this.$element.parents().filter(function() {
 				return self._isScrollableElement($(this));
 			});
 		}
@@ -176,7 +176,7 @@
 	 */
 	Plugin.prototype._addListeners = function() {
 		var self = this;
-		
+
 		this.$scrollContainer.on('scroll.' + pluginName, debounce(function() {
 			self._handleScroll();
 		}, this.options.debounceInt));
@@ -199,15 +199,15 @@
 
 		if (this._shouldTriggerLoad()) {
 			this._beginLoadMore(this.options.loadMoreDelay);
-			
-			// if a the doneLoading callback was provided, set an interval to check when to call it			
+
+			// if a the doneLoading callback was provided, set an interval to check when to call it
 			if (this.options.doneLoading) {
-				this.doneLoadingInt = setInterval( 
+				this.doneLoadingInt = setInterval(
 					function() {
 						if (self.options.doneLoading(self.pageCount)) {
 							self._endLoadMore();
 						}
-					}, 
+					},
 					this.options.interval
 				);
 			}
@@ -261,13 +261,12 @@
 		delay = delay || 0;
 
 		setTimeout($.proxy(function() {
+			this.loading = true;
+			this._removeListeners();
 			this.pageCount++;
-			this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
 			this.$loadingClassTarget.addClass(this.options.loadingClass);
+			this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
 		}, this), delay);
-		
-		this.loading = true;
-		this._removeListeners();
 	};
 
 	/**
@@ -301,7 +300,7 @@
 	/*-------------------------------------------- */
 	/** Helpers */
 	/*-------------------------------------------- */
-	
+
 	// A utility method for calling methods on the plugin instance
 	function callMethod(instance, method, args) {
 		if ( instance && $.isFunction(instance[method]) ) {
@@ -329,7 +328,7 @@
 	/*-------------------------------------------- */
 	/** Plugin Definition */
 	/*-------------------------------------------- */
-	
+
 	$.fn[pluginName] = function(options) {
 		var method = false,
 			methodArgs = arguments;

@@ -154,3 +154,22 @@ QUnit.test('plugin adds loading class to correct element', function(assert) {
 
     this.$fixture.append(this.$scrollDiv);
 });
+
+QUnit.test('plugin removes loading class when done callback is invoked', function(assert) {
+    var done = assert.async(),
+        _this = this;
+
+    this.$scrollDiv.infiniteScrollHelper({
+        triggerInitialLoad: true,
+        loadMore: function(page, doneLoading) {
+            doneLoading();
+        }
+    });
+
+    setTimeout(function() {
+        assert.equal( _this.$scrollDiv.hasClass('loading'), false, 'scroll div does not have loading class');
+        done();
+    }, 100);
+
+    this.$fixture.append(this.$scrollDiv);
+});
