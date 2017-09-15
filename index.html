@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=Edge"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Infinite Scroll Helper</title><style>*{box-sizing:border-box}.cxs-display-table{display:table}.cxs-2947628758 img{max-width: 100%;height: auto;margin-top:16px;margin-bottom:16px}.cxs-3954183383{font-size:24px}.cxs-183745076 a:hover{text-decoration:underline}.cxs-4066908388{clear:both}.cxs-799160745{font-size:48px}.cxs-1246195080{margin-left:-8px;margin-right:-8px}.cxs-2947628758{}.cxs-2947628758 h1{font-weight:600;line-height:1.25;font-size:48px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 h2{font-weight:600;line-height:1.25;font-size:24px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 h3{font-weight:600;line-height:1.25;font-size:20px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 h4{font-weight:600;line-height:1.25;font-size:16px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 h5{font-weight:600;line-height:1.25;font-size:14px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 h6{font-weight:600;line-height:1.25;font-size:12px;margin-top:32px;margin-bottom:8px}.cxs-2947628758 p{overflow-x:auto;margin-top:0px;margin-bottom:16px}.cxs-2947628758 code{font-family:Menlo, monospace;font-size:14px;padding:4px;background-color:#eee;border-radius:2px}.cxs-2947628758 pre{font-family:Menlo, monospace;font-size:14px;overflow-x:auto;padding:16px;margin-top:8px;margin-bottom:32px;background-color:#eee;border-radius:2px}.cxs-2947628758 pre .hljs-keyword{color:#08e}.cxs-2947628758 pre .hljs-built_in{color:#059}.cxs-2947628758 pre .hljs-type{color:#059}.cxs-2947628758 pre .hljs-literal{color:#08e}.cxs-2947628758 pre .hljs-number{color:#e08}.cxs-2947628758 pre .hljs-regexp{color:#08e}.cxs-2947628758 pre .hljs-string{color:#059}.cxs-2947628758 pre .hljs-subst{color:#059}.cxs-2947628758 pre .hljs-symbol{color:#08e}.cxs-2947628758 pre .hljs-class{color:#08e}.cxs-2947628758 pre .hljs-function{color:#e08}.cxs-2947628758 pre .hljs-title{color:#08e}.cxs-2947628758 pre .hljs-params{color:#059}.cxs-2947628758 pre .hljs-comment{color:#059}.cxs-2947628758 pre .hljs-doctag{color:#059}.cxs-2947628758 pre .hljs-meta{color:#059}.cxs-2947628758 pre .hljs-meta-keyword{color:#08e}.cxs-2947628758 pre .hljs-meta-string{color:#08e}.cxs-2947628758 hr{margin-top:48px;margin-bottom:48px;border:0px;border-bottom-style:solid;border-bottom-width:1px;border-bottom:2px solid #ddd}.cxs-2947628758 table{border-collapse:separate;border-spacing:0px;max-width:100%;width:100%}.cxs-2947628758 th{text-align:left;line-height:inherit;vertical-align:bottom}.cxs-2947628758 td{vertical-align:top;line-height:inherit}.cxs-183745076 a{color:#2196f3;text-decoration: none}.cxs-2947628758 a{color:#08e;text-decoration: none}.cxs-2947628758 a:hover{text-decoration:underline}.cxs-2947628758 ul{padding-left:32px;margin-top:0px;margin-bottom:16px}.cxs-183745076{}.cxs-183745076 h1{font-weight:500;letter-spacing:-0.01em;font-size:48px;margin-top:32px;margin-bottom:8px}.cxs-183745076 h2{font-weight:500;letter-spacing:-0.01em;font-size:24px;margin-top:32px;margin-bottom:8px}.cxs-183745076 h3{font-weight:500;letter-spacing:-0.01em;font-size:20px;margin-top:32px;margin-bottom:8px}.cxs-183745076 h4{font-weight:500;letter-spacing:-0.01em;font-size:16px;margin-top:32px;margin-bottom:8px}.cxs-183745076 h5{font-weight:500;letter-spacing:-0.01em;font-size:14px;margin-top:32px;margin-bottom:8px}.cxs-183745076 h6{font-weight:500;letter-spacing:-0.01em;font-size:12px;margin-top:32px;margin-bottom:8px}.cxs-183745076 p{overflow-x:auto;margin-top:0px;margin-bottom:16px}.cxs-183745076 code{font-family:Menlo, monospace;font-size:14px;padding:4px;background-color:#f5f5f5;border-radius:2px}.cxs-183745076 pre{font-family:Menlo, monospace;font-size:14px;overflow-x:auto;padding:16px;margin-top:8px;margin-bottom:32px;background-color:#f5f5f5;border-radius:2px}.cxs-183745076 pre .hljs-keyword{color:#2196f3}.cxs-183745076 pre .hljs-built_in{color:#1565c0}.cxs-183745076 pre .hljs-type{color:#1565c0}.cxs-183745076 pre .hljs-literal{color:#2196f3}.cxs-183745076 pre .hljs-number{color:#ff4081}.cxs-183745076 pre .hljs-regexp{color:#2196f3}.cxs-183745076 pre .hljs-string{color:#1565c0}.cxs-183745076 pre .hljs-subst{color:#1565c0}.cxs-183745076 pre .hljs-symbol{color:#2196f3}.cxs-183745076 pre .hljs-class{color:#2196f3}.cxs-183745076 pre .hljs-function{color:#ff4081}.cxs-183745076 pre .hljs-title{color:#2196f3}.cxs-183745076 pre .hljs-params{color:#1565c0}.cxs-183745076 pre .hljs-comment{color:#1565c0}.cxs-183745076 pre .hljs-doctag{color:#1565c0}.cxs-183745076 pre .hljs-meta{color:#1565c0}.cxs-183745076 pre .hljs-meta-keyword{color:#2196f3}.cxs-183745076 pre .hljs-meta-string{color:#2196f3}.cxs-183745076 hr{margin-top:48px;margin-bottom:48px;border:0px;border-bottom-style:solid;border-bottom-width:1px;border-bottom:2px solid #e0e0e0}.cxs-183745076 table{border-collapse:separate;border-spacing:0px;max-width:100%;width:100%}.cxs-183745076 th{text-align:left;line-height:inherit;vertical-align:bottom}.cxs-183745076 td{vertical-align:top;line-height:inherit}.cxs-183745076 img{max-width: 100%;height: auto;margin-top:16px;margin-bottom:16px}.cxs-183745076 ul{padding-left:32px;margin-top:0px;margin-bottom:16px}@media screen and (min-width: 52em) { .cxs-799160745{font-size:72px} }@media screen and (min-width: 52em) { .cxs-3954183383{} }</style><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,,500"/></head><body style="margin:0;"><div class="Xv" style="font-family:Roboto, sans-serif;font-weight:400;line-height:1.5;color:#212121;background-color:#fff;"><nav style="position:relative;margin-bottom:-48px;display:flex;align-items:center;padding-left:16px;padding-right:16px;color:#fff;"><a href="https://github.com/expandtheroom/jquery-infinite-scroll-helper" class="Link" style="box-sizing:border-box;color:inherit;display:inline-block;font-size:14px;line-height:16px;padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;font-weight:600;text-decoration:none;margin-right:8px;">GitHub</a><a href="https://npmjs.com/package/jquery-infinite-scroll-helper" class="Link" style="box-sizing:border-box;color:inherit;display:inline-block;font-size:14px;line-height:16px;padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;font-weight:600;text-decoration:none;margin-right:8px;">npm</a></nav><header class="BannerHeader" style="display:flex;align-items:center;justify-content:center;text-align:center;min-height:80vh;color:white;background-color:#212121;background-image:linear-gradient(45deg, #2196f3, #ff4081);background-size:cover;background-position:center;"><div style="box-sizing:border-box;width:100%;max-width:896px;margin-left:auto;margin-right:auto;padding-top:48px;padding-bottom:48px;padding-left:32px;padding-right:32px;"><h1 class="cxs-799160745" style="box-sizing:border-box;font-weight:500;letter-spacing:-0.01em;margin:0;">jQuery Infinite Scroll Helper</h1><h2 class="cxs-3954183383" style="box-sizing:border-box;font-weight:500;letter-spacing:-0.01em;margin:0;">A lightweight implementation of the infinite scroll mechanic.  By providing two essential callbacks, loadMore and doneLoading, the jQuery Infinite Scroll Helper plugin makes it a breeze to add infinite scrolling functionality to your page.</h2><p class="Text" style="box-sizing:border-box;font-size:20px;margin:0;">v1.2.4</p><div class="cxs-1246195080" style="box-sizing:border-box;padding-top:16px;padding-bottom:16px;"><iframe src="https://platform.twitter.com/widgets/tweet_button.html?text=jquery-infinite-scroll-helper%3A%20A%20lightweight%20implementation%20of%20the%20infinite%20scroll%20mechanic.%20%20By%20providing%20two%20essential%20callbacks%2C%20loadMore%20and%20doneLoading%2C%20the%20jQuery%20Infinite%20Scroll%20Helper%20plugin%20makes%20it%20a%20breeze%20to%20add%20infinite%20scrolling%20functionality%20to%20your%20page.&amp;url=&amp;via=&amp;hashtags=&amp;size=" height="20" allowtransparency="true" frameborder="0" scrolling="no" style="box-sizing:border-box;width:61px;overflow:hidden;margin:8px;"></iframe><iframe src="https://ghbtns.com/github-btn.html?type=star&amp;count=true&amp;user=expandtheroom&amp;repo=jquery-infinite-scroll-helper&amp;size=" height="20" frameborder="0" scrolling="no" style="box-sizing:border-box;width:100px;overflow:hidden;margin:8px;"></iframe><div class="cxs-4066908388 cxs-display-table"></div></div></div></header><div class="cxs-183745076" style="box-sizing:border-box;max-width:896px;margin-left:auto;margin-right:auto;padding-top:32px;padding-bottom:32px;padding-left:32px;padding-right:32px;"><article style="box-sizing:border-box;"><div><h1>jQuery Infinite Scroll Helper</h1>
+
+<h2>Options</h2>
+<h3>bottomBuffer</h3>
+<p><em>(number)</em> The number of pixels from the bottom of the window in which the <code>loadMore</code> callback should be invoked.  The default is 0.</p>
+<h3>debounceInt</h3>
+<p><em>(number)</em> The interval, in milliseconds, that the scroll event handler will be debounced.</p>
+<h3>doneLoading</h3>
+<p><em>(function)</em> A callback that must return <code>true</code> or <code>false</code>, signaling whether loading has completed. This callback is passed a <code>pageCount</code> argument.</p>
+<h3>interval</h3>
+<p><em>(number)</em> The interval, in milliseconds, that the doneLoading callback will be called by the plugin. It will stop being called once it returns <code>true</code>. The default is 300.</p>
+<h3>loadingClass</h3>
+<p><em>(string)</em> The class that will be added to the target element once <code>loadMore</code> has been invoked. The default is <code>loading</code>.</p>
+<h3>loadingClassTarget</h3>
+<p><em>(string)</em> A selector targeting the element that will receive the class specified by the <code>loadingClass</code> option.</p>
+<h3>loadMore</h3>
+<p><em>(function)</em> A callback function that is invoked when the scrollbar eclipses the bottom threshold of the element being scrolled.  This callback is passed two arguments:</p>
+<ul>
+<li><code>pageCount</code>: The page number to loaded. This can be helpful when making requests to endpoints that require a page number.</li>
+<li><code>done</code>: A callback function that should be called when loading has completed. This is an alternative way to signal that you are done loading instead of defining the <code>doneLoading</code> callback.</li>
+</ul>
+<h3>loadMoreDelay</h3>
+<p><em>(number)</em> The amount of time, in milliseconds, before the loadMore callback is invoked once the bottom of the scroll container has been reached.</p>
+<h3>scrollContainer</h3>
+<p><em>(string|HTMLElement)</em> If provided, the element that the scroll listener will be attached to. This can either be a selector or a DOM element reference.
+If not specified, the plugin will try to find the first scrollable parent if the element itself is not scrollable.</p>
+<h3>startingPageCount</h3>
+<p><em>(number)</em> The starting page count that the plugin will increment each time the <code>loadMore</code> callback is invoked. The default is 1.</p>
+<h3>triggerInitialLoad</h3>
+<p><em>(boolean)</em> Whether or not the plugin should make an initial call to the <code>loadMore</code> callback. This can be set to <code>true</code> if, for instance, you need to load the initial content asynchronously on page load.</p>
+<h2>Methods</h2>
+<h3>destroy</h3>
+<p>Destroys the plugin instance, removing all internal listeners and nullifying any external references.</p>
+<pre><span class="hljs-variable">$(</span>selector).infiniteScrollHelper(<span class="hljs-string">'destroy'</span>);</pre><h2>Usage</h2>
+<pre>$(<span class="hljs-string">'#my-element-to-watch'</span>).infiniteScrollHelper({
+    <span class="hljs-attr">loadMore</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">page</span>) </span>{
+        <span class="hljs-comment">// load some data, parse some data</span>
+    },
+
+    <span class="hljs-attr">doneLoading</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-comment">// return true if you are done doing your thing, false otherwise</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+});</pre><p>or when using the <code>done</code> argument instead of the <code>doneLoading</code> callback</p>
+<pre>$(<span class="hljs-string">'#my-element-to-watch'</span>).infiniteScrollHelper({
+    <span class="hljs-attr">loadMore</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">page, done</span>) </span>{
+        <span class="hljs-comment">// you should use the page argument to either select an anchor/href and load</span>
+        <span class="hljs-comment">// the contents of that url or make a call to an API that accepts a page number</span>
+
+        <span class="hljs-keyword">var</span> nextPageUrl = $(<span class="hljs-string">'.pagination a'</span>).eq(page - <span class="hljs-number">1</span>).attr(<span class="hljs-string">'href'</span>);
+
+        $.get(nextPageUrl, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+            $(data).find(<span class="hljs-string">'.items'</span>).appendTo(<span class="hljs-string">'#my-element-to-watch'</span>);
+            <span class="hljs-comment">// call the done callback to let the plugin know you are done loading</span>
+            done();
+        });
+
+        <span class="hljs-comment">// or an API perhaps</span>
+        $.getJSON(<span class="hljs-string">'http://myawesomeapi.com/data?p='</span> + page, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+            <span class="hljs-comment">// parse json data and create new html then append</span>
+
+            done();
+        });
+    }
+});</pre><p>The plugin can also be instantiated using constructor invocation</p>
+<pre>new InfiniteScrollHelper(<span class="hljs-symbol">$</span>(<span class="hljs-string">'#my-element-to-watch'</span>)[<span class="hljs-number">0</span>], <span class="hljs-keyword">options</span>);</pre><h4>IE6/7 Note</h4>
+<p>There will most likely be an issue with the scroll offset calculation when calling the plugin direclty on an element that is set to overflow: scroll-y in IE 6 &amp; 7. In this case, it is best to wrap the children of the element in a container and call the plugin on this container instead.</p>
+<h2>Dependencies</h2>
+<ul>
+<li>jQuery 1.7.0+</li>
+</ul>
+<h2>Changelog</h2>
+<h3>1.2.4</h3>
+<ul>
+<li>Fixed issue where loading class would not be removed after calling the done callback synchronously.</li>
+<li>Removed jQuery plugin repo JSON file.</li>
+<li>Added .editorconfig file.</li>
+</ul>
+<h3>1.2.3</h3>
+<ul>
+<li>Added a <code>scrollContainer</code> option.</li>
+<li>Added unit tests.</li>
+</ul>
+<h3>1.2.2</h3>
+<ul>
+<li>Changed how the scrollable element is detected by accounting for overflow scroll OR auto.</li>
+<li>Fixed issue where position fixed elements would not trigger the <code>loadMore</code> callback when the window was scrolled past y0.</li>
+</ul>
+<h3>1.2.1</h3>
+<ul>
+<li>Updated bower.json homepage URL to point to Github page.</li>
+</ul>
+<h3>1.2.0</h3>
+<ul>
+<li>Added a <code>loadMoreDelay</code> option. This allows you to set a delay before the <code>loadMore</code> callback is invoked.</li>
+<li>Fixed issue where calling destroy before the plugin was instantiated would cause unintentional instantiation of plugin.</li>
+<li>Added plugin as package on Bower.</li>
+</ul>
+<h3>1.1.0</h3>
+<ul>
+<li>Fixed/added the ability to use the plugin on elements with overflow scroll. Previously the plugin only worked when the element being watched was scrolled within the window.</li>
+<li>A <code>done</code> argument is now passed to the <code>loadMore</code> callback. You can invoke this callback to signal that you are done loading content instead of defining the <code>doneLoading</code> callback option.</li>
+<li>Added the <code>debounceInt</code> option. The plugin now uses debouncing for the scroll event. You can specify the interval if you want it to be different than the default 100ms.</li>
+<li>Added a <code>loadingClassTarget</code> option.</li>
+<li>Added a <code>startingPageCount</code> option.</li>
+<li>Added a <code>triggerInitialLoad</code> option.</li>
+</ul>
+<h3>1.0.5</h3>
+<ul>
+<li>Fixed issue #4 - destroy method was not properly destroying instance which prevented another instance from being created</li>
+</ul>
+<h3>1.0.4</h3>
+<ul>
+<li>The <code>doneLoading</code> callback now receives pageCount as a parameter.</li>
+</ul>
+<h3>1.0.3</h3>
+<ul>
+<li>Changed details in manifest file.</li>
+<li>Doc updates.</li>
+</ul>
+<h3>1.0.2</h3>
+<ul>
+<li>Fixed manifest file keyword error.</li>
+</ul>
+<h3>1.0.1</h3>
+<ul>
+<li>Regenerated minified/production script to match development version.</li>
+</ul>
+<h3>1.0.0</h3>
+<ul>
+<li>Initial Release.</li>
+</ul>
+<h2>License</h2>
+<p>Copyright (c) 2014 Expand The Room, LLC</p>
+<p>Licensed under the MIT license.</p>
+</div></article></div><footer><div style="box-sizing:border-box;max-width:896px;margin-left:auto;margin-right:auto;margin-bottom:32px;padding-top:8px;padding-bottom:8px;padding-left:32px;padding-right:32px;"><div style="margin-left:-16px;margin-right:-16px;"><a href="https://github.com/expandtheroom/jquery-infinite-scroll-helper" class="Link" style="box-sizing:border-box;color:inherit;display:inline-block;font-size:14px;line-height:16px;padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;font-weight:600;text-decoration:none;">GitHub</a><a href="https://github.com/expandtheroom" class="Link" style="box-sizing:border-box;color:inherit;display:inline-block;font-size:14px;line-height:16px;padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;font-weight:600;text-decoration:none;">expandtheroom</a></div><div></div></div></footer></div><div style="font-family:-apple-system, sans-serif;font-size:12px;font-weight:600;text-align:right;padding:24px;color:#333;background-color:#eee;"><a href="http://compositor.io" style="color:inherit;text-decoration:none;">Built with Compositor.io</a></div></body></html>
