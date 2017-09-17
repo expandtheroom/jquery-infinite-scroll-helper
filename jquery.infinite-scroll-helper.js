@@ -285,6 +285,14 @@
 	/*-------------------------------------------- */
 
 	/**
+	 * Set the pageCount
+	 * @public
+	 */
+	Plugin.prototype.setPageCount = function(p) {
+		this.pageCount = p;
+	};
+	
+	/**
 	 * Destroys the plugin instance
 	 * @public
 	 */
