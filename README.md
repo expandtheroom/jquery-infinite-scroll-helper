@@ -44,6 +44,8 @@ _(number)_ The starting page count that the plugin will increment each time the 
 ### triggerInitialLoad ###
 _(boolean)_ Whether or not the plugin should make an initial call to the `loadMore` callback. This can be set to `true` if, for instance, you need to load the initial content asynchronously on page load.
 
+### prefill ###
+_(boolean)_ Whether or not the plugin will attempt to load data until end of the visible scroll area. The default is false.
 
 Methods
 -------
@@ -108,6 +110,9 @@ Dependencies
 
 Changelog
 ---------
+### 1.2.5
+* Added prefill support
+
 ### 1.2.4
 * Fixed issue where loading class would not be removed after calling the done callback synchronously.
 * Removed jQuery plugin repo JSON file.

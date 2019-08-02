@@ -70,7 +70,12 @@
 		 * the initial content asynchronously on page load
 		 * @type {boolean}
 		 */
-		triggerInitialLoad: false
+		triggerInitialLoad: false,
+
+		/**
+		 * Whether or not the plugin will attempt to load data until end of the visible scroll area
+		 */
+		prefill: false
 	};
 
 	/*-------------------------------------------- */
@@ -278,6 +283,9 @@
 		this.loading = false;
 		this.$loadingClassTarget.removeClass(this.options.loadingClass);
 		!this.destroyed && this._addListeners();
+		if (this.options.prefill && this._shouldTriggerLoad()) {
+			this._handleScroll();
+		}
 	};
 
 	/*-------------------------------------------- */
